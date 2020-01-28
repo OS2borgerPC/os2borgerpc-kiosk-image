@@ -1,0 +1,47 @@
+In order to build the ISO image, use a Ubuntu 16.04 Server Edition
+installation CD and follow the instructions on this page:
+
+https://help.ubuntu.com/community/InstallCDCustomization
+
+Notably, mount the ISO and copy the contents to a location in your file
+system, e.g. /opt/cd-image (which we'll assume in the following).
+
+When you have done that, copy the contents of all directories in the
+ubuntu-image folder *except* "pool/extras/" to the corresponding folders
+in /opt/cd-image.
+
+The file "pool/extras/debs.text" lists the .deb files currently in
+pool/extras in the ISO together with the apt command that fetched them
+them.
+
+If you need to update the packages in the ISO please create a new
+virtual machine from the ISO, log in to that machine and run:
+
+apt clean
+apt install --download-only <the packages you need>
+
+Now take all the debs collected in /var/cache/apt/archives and copy to
+"/pool/extras". Now proceed to build and sign the repositories in the
+ISO by following the instructions in the ISO page.
+
+Note: IF YOU ARE NOT UPDATING THE REPO IN pool/extras YOU DON'T NEED TO
+SIGN THE REPOSITORIES OR CHANGE AND SIGN filesystem.squashfs.
+
+Specifically, if you're only changing preseed or script files, all you
+have to do is update the MD5 sum in the root.
+
+If you *did* add debs to pool/extras, please note:
+
+* When you "apt-get source ubuntu-keyring", you *must* get the source
+  code corresponding to Xenial (Ubuntu 16.04). Otherwise it won't work.
+
+* To generate a new filesystem.squashfs, you must first unpack it with
+  unsquashfs - the directory you get from that is where you put the
+  updated keyrings.
+
+* Delete the old filesystem.squashfs before rebuilding it with
+  mksquashfs, otherwise your changes are written to new paths with "_1"
+  appended.
+
+* Do not worry about  dpkg-scanpackages, just follow the instructions
+  for apt-ftparchive and you're good.
