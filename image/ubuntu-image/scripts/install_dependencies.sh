@@ -65,8 +65,5 @@ fi
 # Install python packages
 pip install --upgrade bibos-utils bibos-client
 
-# Setup unattended upgrades
-"$DIR/../../admin_scripts/image_core/apt_periodic_control.sh" security
-
 # Install English language package
 apt-get -y install language-pack-en
