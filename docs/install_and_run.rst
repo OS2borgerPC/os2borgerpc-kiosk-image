@@ -99,4 +99,8 @@ a VNC client.
     You *must* change the standard password before or *immediately*
     after running this script.
 
+.. note::
 
+    You use ``superuser``'s standard UNIX password to SSH. In order to
+    connect with VNC, you need to supply a specific VNC password as a
+    parameter for this script.
