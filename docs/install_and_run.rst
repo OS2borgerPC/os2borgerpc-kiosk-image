@@ -97,6 +97,9 @@ In this script, you must specify the following four parameters:
   "1980".
 * ``height`` - the height component of the desired screen resolution, e.g.
   "1080".
+* ``orientation`` - the orientation or rotation of the screen. Values
+  must be one of ``normal``, ``right`` or ``left``. If this parameter is
+  misspelled, the system will default to "normal".
 
 The width and height parameters must correspond to the preferred
 (maximum) screen resolution of your monitor.
