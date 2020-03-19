@@ -35,9 +35,12 @@ sleep $TIME
 export XAUTHORITY=/home/chrome/.Xauthority
 # Rotate screen
 active_monitors=(\$(xrandr --listactivemonitors -display :0 | grep -v Monitors | awk '{ print \$4; }'))
-# If more than one monitor, just rotate the first.
-do_rotate=\${active_monitors[0])}
-xrandr --output \${active_monitors[0]} --rotate $ORIENTATION -display :0
+# If more than one monitor, rotate them all.
+
+for m in "\${active_monitors[@]}"
+do
+    xrandr --output \$m --rotate $ORIENTATION -display :0
+done
 
 EOF
 
