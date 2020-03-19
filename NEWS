@@ -1,3 +1,13 @@
+* Version 0.1.1, March 19, 2020
+
+Changes in this version:
+
+ - Chromium setup script updated to receive monitor resolution as
+   parameters.
+ - Chromium setup script now support rotating display - "orientation"
+ parameter added.
+
+
 * Version 0.1.0, February 5, 2020
 
 Initial release.
