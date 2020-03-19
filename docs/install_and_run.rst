@@ -61,7 +61,7 @@ Connect to OS2borgerPC admin
 
 Once you're connected to the network, enter the command::
 
-    os2borgerpc_server_setup
+    sudo os2borgerpc_server_setup
 
 This will install all dependencies for the OS2borgerPC client and
 connect to the admin system.
@@ -88,6 +88,21 @@ When this script has run successfully, you can configure Chromium to
 start automatically on boot and configure the start URL and time delay
 as needed. You do this by running the script called "OS2displayOS - Autostart
 Chromium".
+
+In this script, you must specify the following four parameters:
+
+* ``time`` - a delay time before Chromium is started.
+* ``url`` - the OS2display start URL.
+* ``width`` - the width (X) component of the desired screen resolution, e.g.
+  "1980".
+* ``height`` - the height component of the desired screen resolution, e.g.
+  "1080".
+* ``orientation`` - the orientation or rotation of the screen. Values
+  must be one of ``normal``, ``right`` or ``left``. If this parameter is
+  misspelled, the system will default to "normal".
+
+The width and height parameters must correspond to the preferred
+(maximum) screen resolution of your monitor.
 
 In order to have remote access to this system, you need to run the
 script called "OS2displayOS  - Installer SSH og VNC". After this, you'll
