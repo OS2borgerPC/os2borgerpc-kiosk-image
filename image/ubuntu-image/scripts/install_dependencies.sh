@@ -63,7 +63,7 @@ if [ "$PKGSTOINSTALL" != "" ]; then
 fi
 
 # Install os2borgerpc client
-pip install --upgrade bibos-utils bibos-client
+pip3 install http://bibos-admin.magenta-aps.dk/archive/client_packages/os2borgerpc_client-0.0.5.1.tar.gz
 
 # Install English language package
 apt-get -y install language-pack-en
