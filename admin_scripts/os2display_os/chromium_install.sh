@@ -1,3 +1,5 @@
 #!/bin/bash
 # Minimal install of X and Chromium and connectivity.
-apt  install -y xinit chromium-browser
+apt-get install xinit xserver-xorg-core --no-install-recommends --no-install-suggests
+apt-get install chromium-browser
+
