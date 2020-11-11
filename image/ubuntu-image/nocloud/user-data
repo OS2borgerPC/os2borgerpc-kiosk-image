@@ -11,11 +11,11 @@ autoinstall:
   identity: {hostname: os2borgerpc, password: $6$0y9sb.ZdlHsXbfSr$o6DKzeX02cKvmnQ/7qC5RRINRuBZNjCc/fBxwTwYuv9FipTiFkP.gxJdXWQIkhEL.oOI8YD2kdtlQQZVtHSd51,
     realname: Superuser, username: superuser}
   keyboard: {layout: dk, toggle: null, variant: ''}
-  locale: da_DK.UTF-8
-  network:
-    ethernets:
-      ens3: {dhcp4: true}
-    version: 2
+  locale: en_US
+  # network:
+  #  ethernets:
+  #    ens3: {dhcp4: true}
+  #  version: 2
   ssh:
     allow-pw: true
     authorized-keys: []
@@ -34,3 +34,4 @@ autoinstall:
   version: 1
   interactive-sections:
     - storage
+    - network
