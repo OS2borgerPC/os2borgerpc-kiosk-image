@@ -6,25 +6,50 @@ Install OS2borgerPC server image
 
 Get the most recent OS2borgerPC server image from the archive, e.g.
 
-http://bibos-admin.magenta-aps.dk/archive/os2borgerpc-server-0.1.0.iso
+http://bibos-admin.magenta-aps.dk/archive/TO_BE_SPECIFIED.iso
 
-Burn the image to a USB or DVD and boot the target computer with it.
+Copy the image to a USB or DVD and boot the target computer with it.
 
-In the bootup menu, choose the first option, "Install Ubuntu Server for
-OS2display".
-
-This installation procedure will not ask a lot of questions, but it will
-ask where and how to install the operating system. Choose your primary
-harddisk, ``/dev/sda`` in most cases.
 
 The image will work with UEFI boot, but legacy boot is also supported.
-If using legacy boot, the installer may ask you where to install the
-GRUB bootloader. Enter the path of your primary harddisk (again,
-``/dev/sda`` in most cases) - if you don't enter anything, the system
-will not work.
 
-Reboot. You'll be able to login as the user ``superuser`` with password
-``superuser``.
+The installation procedure will not ask a lot of questions. First of
+all, it will ask you to choose a language for the installation, as shown
+below:
+
+.. image:: install_1.png
+
+Unfortunately, Danish is currently not supported. Hit ENTER to keep
+"English".
+
+Next, configure your network as shown below:
+
+.. image:: install_2.png
+
+The installer will try to configure the network manually - if you're
+using a wireless network, you will have to specify network and password
+manually.
+
+When done, select "Done" and hit ENTER.
+
+Next, specify the disk you will install on, as shown below:
+
+.. image:: install_3.png
+
+If you're installing on a normal setup with only one hard disk attached,
+the defaults will be fine - in that case, hit TAB until you reach "Done"
+and hit ENTER. Otherwise, specify disk and partitions according to your
+needs. 
+
+As this will destroy all data in the disk in question, you will now be
+asked to "Confirm destructive action". To proceed, select "Continue".
+
+.. warning::  This step *will* destroy all data on the disk you install on.
+
+The system will now install - this will take some time.
+
+Remove the install media and reboot. You'll be able to login as the user
+``superuser`` with password ``superuser``.
 
 
 .. danger:: 
