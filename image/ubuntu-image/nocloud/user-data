@@ -23,15 +23,11 @@ autoinstall:
   storage:
     layout:
         name: lvm
-  packages:
-    - network-manager
-    - language-pack-da
 
   late-commands:
-    - ls 
+    - curtin in-target --target=/target -- dpkg -i /cdrom/pool/extras/*.deb 2>&1 1> /dev/null
     - cp -r /cdrom/scripts/* /target/usr/local/bin
 
   version: 1
   interactive-sections:
     - storage
-    - network
