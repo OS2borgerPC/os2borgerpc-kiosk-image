@@ -22,19 +22,9 @@ below:
 Unfortunately, Danish is currently not supported. Hit ENTER to keep
 "English".
 
-Next, configure your network as shown below:
-
-.. image:: install_2.png
-
-The installer will try to configure the network manually - if you're
-using a wireless network, you will have to specify network and password
-manually.
-
-When done, select "Done" and hit ENTER.
-
 Next, specify the disk you will install on, as shown below:
 
-.. image:: install_3.png
+.. image:: install_2.png
 
 If you're installing on a normal setup with only one hard disk attached,
 the defaults will be fine - in that case, hit TAB until you reach "Done"
@@ -62,7 +52,17 @@ Getting network
 
 If you installed with an Ethernet cable and a DHCP-enabled network, the
 computer is already online. If you need to set up wireless network or
-configure a static IP, enter the following command::
+configure a static IP, you must first install basic wireless
+capabilities - these are not installed by default. You don't need a
+network connection, just enter the command::
+
+    sudo wifi_setup
+
+.. note:: If you don't need to use a wireless connection or do any
+    other special network setup like setting up a static IP address,
+    there is no need to execute this command.
+
+With this in place, enter the following command::
 
     nmtui
 

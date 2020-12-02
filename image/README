@@ -23,36 +23,33 @@ Now you can make any modifications you want, e.g. to the install process in
 ``nocloud/user-data`` or to the boot instructions in ``isolinux`` or
 ``boot/grub``.
 
-If you need to update the packages in the ISO please create a new
-virtual machine from the ISO, log in to that machine and run:
+Special customizations are best handled through ``late_commands`` in
+``nocloud/user-data``.
 
-apt clean
-apt install --download-only <the packages you need>
+If you need to include extra packages in the ISO, one way to do it is to
+include the packages (``.deb`` files) in a bespoke directory in the ISO
+and install them directly with ``dpkg -i``, either in a ``late_command``
+or using a script.
 
-Now take all the debs collected in /var/cache/apt/archives and copy to
-"/pool/extras". Now proceed to build and sign the repositories in the
-ISO by following the instructions in the ISO page.
+Alternatively, you could make them officially part of the image by
+adding them in ``pool/extras``.  This, however, requires you to unsquash
+the embedded ``squashfs`` file system, update the package lists,
+re-squash it and sign it. You must also compile a new version of the
+``ubuntu-keyring`` package to include your own GPG signing key.
 
-This process (of signing and squashing etc) is described here:
+If you need to do this, you can find instructions on doing so here:
 
 https://help.ubuntu.com/community/InstallCDCustomization
 
+If you *did* add debs to ``pool/extras``, please note:
 
-Note: IF YOU ARE NOT UPDATING THE REPO IN pool/extras YOU DON'T NEED TO
-SIGN THE REPOSITORIES OR CHANGE AND SIGN filesystem.squashfs.
-
-Specifically, if you're only changing preseed or script files, all you
-have to do is update the MD5 sum in the root.
-
-If you *did* add debs to pool/extras, please note:
-
-* To generate a new filesystem.squashfs, you must first unpack it with
-  unsquashfs - the directory you get from that is where you put the
+* To generate a new ``filesystem.squashfs``, you must first unpack it
+  with unsquashfs - the directory you get from that is where you put the
   updated keyrings.
 
 * Delete the old filesystem.squashfs before rebuilding it with
   mksquashfs, otherwise your changes are written to new paths with "_1"
   appended.
 
-* Do not worry about  dpkg-scanpackages, just follow the instructions
-  for apt-ftparchive and you're good.
+* Do not worry about  ``dpkg-scanpackages``, just follow the instructions
+  for ``apt-ftparchive`` and you're good.
