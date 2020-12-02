@@ -25,7 +25,6 @@ autoinstall:
         name: lvm
 
   late-commands:
-    - curtin in-target --target=/target -- dpkg -i /cdrom/pool/extras/*.deb 2>&1 1> /dev/null
     - cp -r /cdrom/scripts/* /target/usr/local/bin
 
   version: 1
