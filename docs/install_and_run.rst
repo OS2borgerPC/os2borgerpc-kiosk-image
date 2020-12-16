@@ -104,14 +104,14 @@ Once the computer is connected to the admin system and activated, you
 may deploy OS2display to it.
 
 In the admin system, we have introduced three global scripts with the
-prefix "OS2displayOS".
+prefix "OS2displayPC".
 
-The first is called "OS2DisplayOS  - Installer Chromium" and will
+The first is called "OS2DisplayPC  - Installer Chromium" and will
 install the browser and setup minimum GUI capabilities. 
 
 When this script has run successfully, you can configure Chromium to
 start automatically on boot and configure the start URL and time delay
-as needed. You do this by running the script called "OS2displayOS - Autostart
+as needed. You do this by running the script called "OS2displayPC - Autostart
 Chromium".
 
 In this script, you must specify the following four parameters:
