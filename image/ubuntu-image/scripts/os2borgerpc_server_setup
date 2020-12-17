@@ -25,10 +25,6 @@ SECURITY_DIR=/etc/os2borgerpc/security/
 mkdir -p $SECURITY_DIR
 cp -r ${DIR}/security/* "$SECURITY_DIR"
 
-# Set version in configuration
-VERSION=$(cat "$DIR"/../../../VERSION)
-set_os2borgerpc_config os2borgerpc_server_version "$VERSION"
-
 #  Connect to the admin system
 
 register_new_os2borgerpc_client.sh
