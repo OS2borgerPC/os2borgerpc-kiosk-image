@@ -4,9 +4,10 @@ How to install and run the OS2display solution
 Install OS2borgerPC server image
 --------------------------------
 
-Get the most recent OS2borgerPC server image from the archive, e.g.
+Get the most recent OS2borgerPC server image as provided by Magenta,
+or build one yourself according to the instructions in the ``image``
+directory.
 
-http://bibos-admin.magenta-aps.dk/archive/TO_BE_SPECIFIED.iso
 
 Copy the image to a USB or DVD and boot the target computer with it.
 
@@ -106,7 +107,7 @@ may deploy OS2display to it.
 In the admin system, we have introduced three global scripts with the
 prefix "OS2displayPC".
 
-The first is called "OS2DisplayPC  - Installer Chromium" and will
+The first is called "OS2displayPC  - Installer Chromium" and will
 install the browser and setup minimum GUI capabilities. 
 
 When this script has run successfully, you can configure Chromium to
