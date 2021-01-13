@@ -3,14 +3,14 @@
 # HEADER
 #================================================================
 #% SYNOPSIS
-#+    lts_upgrade_in_place_1.sh
+#+    lts_upgrade_in_place_3.sh
 #%
 #% DESCRIPTION
-#%    Step one of the upgrade from 16.04 to 20.04.
+#%    Step three of the upgrade from 16.04 to 20.04.
 #%
 #================================================================
 #- IMPLEMENTATION
-#-    version         lts_upgrade_in_place_step_1.sh 0.0.1
+#-    version         lts_upgrade_in_place_step_3.sh 0.0.1
 #-    author          Carsten Agger
 #-    copyright       Copyright 2020, Magenta Aps
 #-    license         BSD/MIT
@@ -24,7 +24,16 @@
 # END_OF_HEADER
 #================================================================
 
-# Patch jobmanager to avoid early stoppage.
-sed -i "s/900/900000/" /usr/local/lib/python2.7/dist-packages/bibos_client/jobmanager.py
 
-reboot
+
+do-release-upgrade -f DistUpgradeViewNonInteractive >  /var/log/os2borgerpc_upgrade_2.log
+
+rm -r /usr/local/lib/python2.7
+rm -r /usr/local/bin/*bibos*
+
+apt install -y python3-pip
+ln -s /var/lib/bibos /var/lib/os2borgerpc
+ln -s /etc/bibos /etc/os2borgerpc
+
+pip3 install os2borgerpc-client
+
