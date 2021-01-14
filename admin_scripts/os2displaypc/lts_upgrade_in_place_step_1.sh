@@ -25,6 +25,6 @@
 #================================================================
 
 # Patch jobmanager to avoid early stoppage.
-sed -i "s/900/900000/" /usr/local/lib/python2.7/dist-packages/bibos_client/jobmanager.py
+sed -i "s/900/800000/" /usr/local/lib/python2.7/dist-packages/bibos_client/jobmanager.py || exit 1
 
 reboot
