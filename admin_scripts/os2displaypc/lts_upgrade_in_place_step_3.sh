@@ -28,12 +28,14 @@
 
 do-release-upgrade -f DistUpgradeViewNonInteractive >  /var/log/os2borgerpc_upgrade_2.log
 
+
+apt-get update
+apt-get install -y python3-pip || exit 1
+
 rm -r /usr/local/lib/python2.7
 rm -r /usr/local/bin/*bibos*
 
-apt install -y python3-pip
+pip3 install os2borgerpc-client
 ln -s /var/lib/bibos /var/lib/os2borgerpc
 ln -s /etc/bibos /etc/os2borgerpc
-
-pip3 install os2borgerpc-client
 

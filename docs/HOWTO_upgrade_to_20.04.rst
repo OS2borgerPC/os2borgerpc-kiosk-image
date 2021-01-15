@@ -1,7 +1,7 @@
 Upgrade OS2displayPC from Ubuntu 16.04 to 20.04
 ===============================================
 
-This processes consists, for each computer, of the following steps:
+This process consists, for each computer, of the following steps:
 
 1) Run the script "OS2DisplayPC opdater til Ubuntu 20.04 (1)" on the target
 computer. This will reboot the computer and leave the job in state
