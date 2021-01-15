@@ -43,7 +43,7 @@ if [ "$PKGSTOINSTALL" != "" ]; then
 
     # Step 2: Do the actual installation. Abort if it fails.
     # and install
-    apt-get -y install $PKGSTOINSTALL | tee /tmp/bibos_install_log.txt
+    apt-get -y install $PKGSTOINSTALL | tee /tmp/os2borgerpc_install_log.txt
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
         echo "" 1>&2
@@ -54,16 +54,16 @@ if [ "$PKGSTOINSTALL" != "" ]; then
     fi
 
     # upgrade
-    apt-get -y upgrade | tee /tmp/bibos_upgrade_log.txt
-    apt-get -y dist-upgrade | tee /tmp/bibos_upgrade_log.txt
+    apt-get -y upgrade | tee /tmp/os2borgerpc_upgrade_log.txt
+    apt-get -y dist-upgrade | tee /tmp/os2borgerpc_upgrade_log.txt
 
     # Clean .deb cache to save space
     apt-get -y autoremove
     apt-get -y clean
 fi
 
-# Install python packages
-pip install --upgrade bibos-utils bibos-client
+# Install os2borgerpc client
+pip3 install http://bibos-admin.magenta-aps.dk/archive/client_packages/os2borgerpc_client-0.0.5.1.tar.gz
 
 # Install English language package
 apt-get -y install language-pack-en
