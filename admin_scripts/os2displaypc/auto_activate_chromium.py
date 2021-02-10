@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Activates an OS2display screen and runs Chromium in fullscreen. Arguments: [url, activation_code]
@@ -19,7 +19,7 @@ import glob
 import sys
 import stat
 import subprocess
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 subprocess.call([sys.executable, "-m", "pip", "install", 'wget==3.2'])
 subprocess.call([sys.executable, "-m", "pip", "install", 'selenium==3.141.0'])
