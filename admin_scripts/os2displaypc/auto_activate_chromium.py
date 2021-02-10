@@ -56,7 +56,19 @@ chromium_version = chromium_version.split(' ')
 chromium_version = chromium_version[1]
 if chromium_version.split('.')[0] == '86':
     driver_version = '86.0.4240.22'
-    print('Supported Chromium version installed: {}'.format(chromium_version))   
+    print('Supported Chromium version installed: {}'.format(chromium_version))
+    print('Chromedriver reference needed: {}'.format(driver_version))
+elif chromium_version.split('.')[0] == '87':
+    driver_version = '87.0.4280.88'
+    print('Supported Chromium version installed: {}'.format(chromium_version))
+    print('Chromedriver reference needed: {}'.format(driver_version))
+elif chromium_version.split('.')[0] == '88':
+    driver_version = '88.0.4324.96'
+    print('Supported Chromium version installed: {}'.format(chromium_version))
+    print('Chromedriver reference needed: {}'.format(driver_version))
+elif chromium_version.split('.')[0] == '89':
+    driver_version = '89.0.4389.23'
+    print('Supported Chromium version installed: {}'.format(chromium_version))
     print('Chromedriver reference needed: {}'.format(driver_version))
 else:
     print('No supported Chromium version installed.')
