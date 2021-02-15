@@ -18,6 +18,10 @@ installation ISO and unpack it: ::
    rm -rf 'iso/[BOOT]/'
    cp -r /path/to/image/ubuntu-image/* iso
 
+   md5sum iso/README.diskdefines > iso/md5sum.txt
+   sed -i 's|iso/|./|g' iso/md5sum.txt
+
+
 
 Now you can make any modifications you want, e.g. to the install process in
 ``nocloud/user-data`` or to the boot instructions in ``isolinux`` or
@@ -53,3 +57,15 @@ If you *did* add debs to ``pool/extras``, please note:
 
 * Do not worry about  ``dpkg-scanpackages``, just follow the instructions
   for ``apt-ftparchive`` and you're good.
+
+Once you're ready to create the ISO image for installation, run: ::
+
+    xorriso -as mkisofs -r   -V os2displaypc   -o os2displaypc-1.0.0rc1.iso   -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot   -boot-load-size 4 -boot-info-table   -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot   -isohybrid-gpt-basdat -isohybrid-apm-hfsplus   -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin iso/boot iso
+
+where "os2displaypc" and "os2displaypc-1.0.0rc1.iso" should be replaced
+by what you wish the tag and filename of the ISO image to be.
+
+You'll need to install the necessary dependencies to create the ISO - on
+Ubuntu 20.04, it can be done with: ::
+
+    sudo apt-get install xorriso isolinux
