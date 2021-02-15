@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ $UID -ne 0 ]]
+then
+	echo "Denne kommando skal køres som root"
+	exit
+fi
+
 # Setup the OS2BorgerPC client on an Ubuntu Server
 
 DIR=$(dirname ${BASH_SOURCE[0]})
@@ -11,20 +17,14 @@ export DEBIAN_FRONTEND=noninteractive
 $DIR/install_dependencies.sh
 
 # Prepare to run jobs
-mkdir -p /var/lib/bibos/jobs
-chmod -R og-r /var/lib/bibos
+mkdir -p /var/lib/os2borgerpc/jobs
+chmod -R og-r /var/lib/os2borgerpc
 
 # Prepare to run security events
-SECURITY_DIR=/etc/bibos/security/
-mkdir -p /etc/bibos/security/
-cp -R "$DIR"/../overwrites/usr/share/bibos/script-data/security/* "$SECURITY_DIR"
-
-# Set version in configuration
-VERSION=$(cat "$DIR"/../../VERSION)
-set_bibos_config bibos_version "$VERSION"
-# Securing grub
-"$DIR/../../admin_scripts/image_core/grub_set_password.py" $(pwgen -N 1 -s 12)
+SECURITY_DIR=/etc/os2borgerpc/security/
+mkdir -p $SECURITY_DIR
+cp -r ${DIR}/security/* "$SECURITY_DIR"
 
 #  Connect to the admin system
 
-register_new_bibos_client.sh
+register_new_os2borgerpc_client.sh

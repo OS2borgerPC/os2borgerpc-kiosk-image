@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [[ $UID -ne 0 ]]
+then
+	echo "Denne kommando skal køres som root"
+	exit
+fi
+
+# Install all Debian packages needed to set up wifi.
+
+
+DIR=$(dirname ${BASH_SOURCE[0]})
+
+PACKAGE_DIR=${DIR}/wifi
+
+dpkg -i ${PACKAGE_DIR}/*.deb

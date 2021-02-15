@@ -16,12 +16,12 @@ service x11vncservice
        wait            = no
        user            = root
        server          = /usr/bin/x11vnc
-       server_args     = -inetd -o /var/log/x11vnc.log -noxdamage -display :0 -auth /home/chrome/.Xauthority -passwdfile /etc/bibos/vncpasswd
+       server_args     = -inetd -o /var/log/x11vnc.log -noxdamage -display :0 -auth /home/chrome/.Xauthority -passwdfile /etc/os2borgerpc/vncpasswd
        disable         = no
 }
 EOF
 
-cat << EOF > /etc/bibos/vncpasswd
+cat << EOF > /etc/os2borgerpc/vncpasswd
 $VNC_PASSWORD
 EOF
 

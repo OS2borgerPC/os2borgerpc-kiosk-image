@@ -51,17 +51,10 @@ chmod +x /usr/local/bin/rotate_screen.sh &
 cat << EOF > /home/chrome/.xinitrc
 #!/bin/sh
 
-xset -dpms
 xset s off
 xset s noblank
 
 sleep 20
-
-sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/chrome/.config/chromium/Default/Preferences
-
-sed -i 's/"exit_type":"Crashed"/"exit_type":"None"/' /home/chrome/.config/chromium/Default/Preferences
-
-sed -i 's/"restore_on_startup":[0-9]/"restore_on_startup":0/' /home/chrome/.config/chromium/Default/Preferences
 
 /usr/local/bin/rotate_screen.sh
 
