@@ -31,25 +31,31 @@
 # 1. OS2displayPC - Installer Chromium
 # 2. OS2displayPC - Autostart Chromium
 
-# Would like to skip installing sxhkd but it's not trivial to do as it's classified as a "required dependency" for bspwm
+# Would like to skip installing sxhkd but it's not trivial to do as it's 
+# classified as a "required dependency" for bspwm
 
-# Change this back to take an argument once working
+set -ex
+
+[ -z "$1" ] && exit 1
+
 URL=$1
 
 USER=chrome
 # Note: Only the Compact keyboard layout is changed to not have Ctrl, Alt etc.
 ONBOARD_OPTIONS="--theme=/usr/share/onboard/themes/HighContrast.theme --layout /usr/share/onboard/layouts/Compact.onboard"
 
-# Keyboard options: onboard (~100 mb incl. dependencies?), xvkbd (almost no dependencies), florence (~500 mb incl.  dependencies?!), gnome onscreen keyboard, carabou
-# TODO: Consider moving language-pack-da installation to install_dependencies.sh?
+# Keyboard options: onboard (~100 mb incl. dependencies?), xvkbd (almost no 
+# dependencies), florence (~500 mb incl.  dependencies?!), 
+# gnome onscreen keyboard, carabou
+# TODO: Consider moving language-pack-da to install_dependencies.sh?
 apt-get install -y language-pack-da bspwm onboard lemonbar- dmenu-
 
-# TODO: If the entire home dir is deleted on each reboot, everything her besides apt-get needs to be done at every bootup?
 cd /home/$USER || exit 1
 # Make the directory for the config
 mkdir -p .config/bspwm
 
-# onboard: If we want a non-default keyboard theme this is apparently necessary because it attempts to create a file in there
+# onboard: If we want a non-default keyboard theme this is apparently necessary
+# because it attempts to create a file in there
 mkdir .config/dconf
 chown $USER:$USER .config/dconf
 
@@ -67,34 +73,35 @@ bspc config gapless_monocle      true
 # leave 20% space for the keyboard
 bspc config split_ratio          0.80
 
-# Always split downwards/vertically instead of whichever direction there is more space (typically horizontally to begin with)
+# Always split downwards/vertically instead of whichever direction there is 
+# more space (typically horizontally to begin with)
 bspc rule -a "*" split_dir=south
 
 # Test if no difference?: Don't default to monocle?
 # bspc desktop I --layout tiled
 
-# layer=normal is needed at least, to ensure it doesn't cover the entire screen by default
+# layer=normal is needed at least, to ensure it doesn't cover the entire 
+# screen by default
 bspc rule -a Onboard state=tiled layer=normal
 
-# Onboard preferences shouldn't be shown at all. TODO: Not working, but it also doesn't matter right now because the
-# button to show them is no longer there.
-bspc rule -a "Onboard Preferences" layer=below flag=hidden
+# Onboard preferences shouldn't be shown at all. TODO: Not working, but it also
+# doesn't matter right now because the button to show them is no longer there.
+# bspc rule -a "Onboard Preferences" layer=below flag=hidden
 
-# Chromium, with a wm I assume position and width/height are no longer relevant?
 chromium-browser --kiosk $URL --password-store=basic --autoplay-policy=no-user-gesture-required --disable-translate --enable-offline-auto-reload &
 
 # we want æøå on the keyboard
 setxkbmap dk
 
-#sleep 5    # used to just sleep 5 instead. Go back to that if the below solution fails
+#sleep 5  # Go back to this solution if the below solution fails
 
-# Wait until a window (the browser) exists, because onboard needs to be below it
+# Wait until a window (the browser) exists because onboard needs to be below it
 while ! bspc query -N -n .leaf > /dev/null; do
   sleep 0.5
 done
 
-# First time setup of onboard. Attempt at solving a bug where the keyboard appears, 
-# seemingly due to first time initialization
+# First time setup of onboard. Attempt at solving a bug where the keyboard 
+# doesn't appear, seemingly due to first time initialization
 if [ ! -f /home/$USER/.config/dconf/user ]; then
   onboard $ONBOARD_OPTIONS &
   # Give it some time to start
@@ -103,7 +110,7 @@ if [ ! -f /home/$USER/.config/dconf/user ]; then
   sleep 1
 fi
 
-# After config, onboard continues to start with the right theme? Maybe also the right layout?
+# Not certain setting the options is outright necessary past first time setup
 onboard $ONBOARD_OPTIONS &
 EOF
 
