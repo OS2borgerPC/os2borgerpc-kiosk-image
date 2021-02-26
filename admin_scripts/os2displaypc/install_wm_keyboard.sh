@@ -48,15 +48,18 @@ ONBOARD_OPTIONS="--theme=/usr/share/onboard/themes/HighContrast.theme --layout /
 # dependencies), florence (~500 mb incl.  dependencies?!), 
 # gnome onscreen keyboard, carabou
 # TODO: Consider moving language-pack-da to install_dependencies.sh?
+apt-get update
 apt-get install -y language-pack-da bspwm onboard lemonbar- dmenu-
 
 cd /home/$USER || exit 1
 # Make the directory for the config
+# -p is also there to suppress errors in case someone re-runs this script, 
+# and it already exists
 mkdir -p .config/bspwm
 
 # onboard: If we want a non-default keyboard theme this is apparently necessary
 # because it attempts to create a file in there
-mkdir .config/dconf
+mkdir -p .config/dconf
 chown $USER:$USER .config/dconf
 
 # Configure bspwm 
