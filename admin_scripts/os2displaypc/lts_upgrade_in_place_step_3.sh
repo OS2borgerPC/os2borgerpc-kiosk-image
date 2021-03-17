@@ -25,12 +25,13 @@
 #================================================================
 
 
+set -ex
 
 do-release-upgrade -f DistUpgradeViewNonInteractive >  /var/log/os2borgerpc_upgrade_2.log
 
 
 apt-get update
-apt-get install -y python3-pip || exit 1
+apt-get install -y python3-pip
 
 rm -r /usr/local/lib/python2.7
 rm -r /usr/local/bin/*bibos*
@@ -39,3 +40,5 @@ pip3 install os2borgerpc-client
 ln -s /var/lib/bibos /var/lib/os2borgerpc
 ln -s /etc/bibos /etc/os2borgerpc
 
+cp -r /home/chrome/.config/chromium/ /home/chrome/snap/chromium/common
+chown -R chrome:chrome /home/chrome/snap/chromium/common
