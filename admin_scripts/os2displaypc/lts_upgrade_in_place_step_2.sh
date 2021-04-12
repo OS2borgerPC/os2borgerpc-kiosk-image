@@ -24,6 +24,7 @@
 # END_OF_HEADER
 #================================================================
 
+set -ex
 
 # Fix dpkg settings to avoid interactivity.
 cat << EOF > /etc/apt/apt.conf.d/local
