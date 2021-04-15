@@ -15,9 +15,7 @@ __email__      = "danni@magenta.dk", "heini@magenta.dk", "mfm@magenta.dk"
 __status__     = "Production"
 
 import os
-import glob
 import sys
-import stat
 import subprocess
 from urllib.parse import urlparse
 from time import sleep
@@ -69,67 +67,20 @@ else:
     print('Mangler input parametre.')
     sys.exit(1)
 
-# Returned string --> 'Chromimum xx.x.xxxx.xx Built on Ubuntu , running on Ubuntu xx.xx'
-chromium_version = subprocess.check_output('chromium-browser --version', shell=True).decode('ascii')
-chromium_version = chromium_version.split(' ')
-chromium_version = chromium_version[1]
-chromium_major_version = chromium_version.split('.')[0]
-if chromium_major_version in ['86', '87', '88', '89']:
-    if chromium_major_version == '86':
-        driver_version = '86.0.4240.22'
-    elif chromium_major_version == '87':
-        driver_version = '87.0.4280.88'
-    elif chromium_major_version == '88':
-        driver_version = '88.0.4324.96'
-    elif chromium_major_version == '89':
-        driver_version = '89.0.4389.23'
-    print('Supported Chromium version installed: {}'.format(chromium_version))
-    print('Chromedriver reference needed: {}'.format(driver_version))
-else:
-    print('No supported Chromium version installed.')
-    print('Supported Chromium versions are listed in the current script.')
-    sys.exit(1)
-
-system_path = '/usr/local/bin'
-zipfile_name = driver_version + 'chromedriver_linux64.zip'
-zip_path = os.path.join(system_path, zipfile_name)
-extracted_filename = 'chromedriver'
-extracted_filepath = os.path.join(system_path, extracted_filename)
-
-# download gecko and setup
-if not os.path.isfile(zip_path):
-    try:
-        for fl in glob.glob(system_path + '/*chromedriver_linux64.zip'):
-            os.remove(fl)
-        for fl1 in glob.glob(system_path + '/chromedriver'):
-            os.remove(fl1)
-    except OSError:
-        pass
-
-    chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + driver_version + '/chromedriver_linux64.zip'
-    wget.download(chromedriver_url, zip_path)
-    print('Driver download complete.')
-
-    with zipfile.ZipFile(zip_path, 'r') as z:
-        z.extractall(system_path)
-
-    os.chmod(extracted_filepath, stat.S_IRWXU | stat.S_IXGRP | stat.S_IRGRP | stat.S_IXOTH)
-
-    print('Chromedriver downloaded and extracted to path: {}'.format(
-        extracted_filepath)
-    )
-else:
-    print('Chromedriver {} is already setup.'.format(driver_version))
-
 # start chrome headless
 opts = Options()
-# opts.set_headless()
+# These two are supposedly required to run it as root
+# (who normally has no X server running)
 opts.add_argument('--headless')
 opts.add_argument('--no-sandbox')
 opts.add_argument('--disable-dev-shm-usage')
+# In 20.04 there were errors that this fixed
 opts.add_argument('--remote-debugging-port=9222')
+# It will fail to locate the proper binary without this:
+# https://stackoverflow.com/a/22735763/1172409
+opts.binary_location='/snap/bin/chromium'
 # assert opts.headless  # Operating in headless mode
-browser = Chrome(options=opts, executable_path=extracted_filepath)
+browser = Chrome(options=opts, executable_path="/snap/chromium/current/usr/lib/chromium-browser/chromedriver")
 wait = WebDriverWait(browser, timeout=10)
 try:
     browser.get(url)
@@ -171,7 +122,7 @@ sleep(5) # Is this still needed?
 
 db_path = f'/home/{username}/snap/chromium/common/chromium/Default/Local Storage/'
 if not os.path.exists(db_path):
-    os.mkdir(db_path)
+    os.makedirs(db_path)
 
 db_name = 'leveldb/'
 db_path += db_name
