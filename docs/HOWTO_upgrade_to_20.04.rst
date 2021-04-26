@@ -25,5 +25,10 @@ computeren**.
 again, this will take some time, and you should wait until the job has
 succeeded and is seen to be in state *Udført*.
 
-6. Reboot the computer as in 4) - after restart, the upgrade to Ubuntu
+6. Reboot the computer as in 4).
+
+7. Run the script **OS2DisplayPC opdater til Ubuntu 20.04 (4)**. This
+will *not* take a long time, the OS upgrade is done by now.
+
+8. Reboot the computer as in 4) and 6) - after restart, the upgrade to Ubuntu
 20.04 is complete.

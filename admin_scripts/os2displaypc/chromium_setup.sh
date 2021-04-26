@@ -51,6 +51,7 @@ chmod +x /usr/local/bin/rotate_screen.sh &
 cat << EOF > /home/chrome/.xinitrc
 #!/bin/sh
 
+xset -dpms
 xset s off
 xset s noblank
 
