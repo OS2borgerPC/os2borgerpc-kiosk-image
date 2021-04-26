@@ -41,6 +41,9 @@ ln -s /var/lib/bibos /var/lib/os2borgerpc
 ln -s /etc/bibos /etc/os2borgerpc
 
 
+# xrandr and some other utilities "fall off" in the upgrade process.
+apt install x11-xserver-utils
+
 ### MIGRATE OS2DISPLAY SETUP WITH CHROMIUM ###
 
 # Another solution would be copying over xinitrc first, making a new one and
