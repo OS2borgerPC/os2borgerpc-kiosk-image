@@ -123,6 +123,8 @@ sleep(5) # Is this still needed?
 db_path = f'/home/{username}/snap/chromium/common/chromium/Default/Local Storage/'
 if not os.path.exists(db_path):
     os.makedirs(db_path)
+    # Proper ownership of the created directories
+    subprocess.call(["chown", "-R", f"{username}:{username}", db_path])
 
 db_name = 'leveldb/'
 db_path += db_name
