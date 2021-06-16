@@ -7,6 +7,9 @@ solution. The image contains an install script for the OS2borgerPC
 client as well as some utilities to easily connect to the network in
 case no Internet is available during installation.
 
+Read the documentation for this project in docs/ or at 
+`Read The Docs <https://os2borgerpc-server-image.readthedocs.io/>`_.
+
 The OS2borgerPC Server Image is free software, and you are welcome to
 use, study, modify and distribute it under the terms of version 3 of the
 GNU General Public License.
