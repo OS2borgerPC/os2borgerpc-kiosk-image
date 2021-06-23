@@ -72,7 +72,7 @@ apt-get -y install language-pack-da
 # with Aula and attached/onscreen keyboards
 timedatectl set-timezone Europe/Copenhagen
 sed -i 's/# \(da_DK.UTF-8 UTF-8\)/\1/'  /etc/locale.gen
-dpkg-reconfigure --frontend=noninteractive tzdata locales
+dpkg-reconfigure --frontend=noninteractive tzdata
 update-locale LANG=da_DK.UTF-8
 
 # Update the time accordingly
