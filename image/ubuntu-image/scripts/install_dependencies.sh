@@ -65,5 +65,15 @@ fi
 # Install os2borgerpc client
 pip3 install os2borgerpc-client
 
-# Install English language package
-apt-get -y install language-pack-en
+# Install Danish language package
+apt-get -y install language-pack-da
+
+# Set Danish locale and timezone, e.g. for usage
+# with Aula and attached/onscreen keyboards
+timedatectl set-timezone Europe/Copenhagen
+sed -i 's/# \(da_DK.UTF-8 UTF-8\)/\1/'  /etc/locale.gen
+dpkg-reconfigure --frontend=noninteractive tzdata
+update-locale LANG=da_DK.UTF-8
+
+# Update the time accordingly
+ntpdate pool.ntp.org
