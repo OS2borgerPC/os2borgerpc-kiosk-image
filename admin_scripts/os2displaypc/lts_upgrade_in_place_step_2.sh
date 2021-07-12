@@ -36,8 +36,6 @@ Dpkg::Options {
 
 EOF
 
-do-release-upgrade -f DistUpgradeViewNonInteractive > /var/log/os2borgerpc_upgrade_1.log
+FILENAME="/var/log/os2borgerpc_upgrade_1_$(date -u +"%Y-%m-%d-%H-%M").log"
 
-
-
-
+do-release-upgrade -f DistUpgradeViewNonInteractive | tee "$FILENAME"

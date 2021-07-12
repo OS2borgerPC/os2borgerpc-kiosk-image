@@ -27,5 +27,6 @@
 
 set -ex
 
-do-release-upgrade -f DistUpgradeViewNonInteractive >  /var/log/os2borgerpc_upgrade_2.log
+FILENAME="/var/log/os2borgerpc_upgrade_2_$(date -u +"%Y-%m-%d-%H-%M").log"
 
+do-release-upgrade -f DistUpgradeViewNonInteractive | tee "$FILENAME"
