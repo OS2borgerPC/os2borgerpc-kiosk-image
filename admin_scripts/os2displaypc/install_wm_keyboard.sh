@@ -1,68 +1,59 @@
 #! /usr/bin/env sh
 
-#================================================================
-# HEADER
-#================================================================
-#% SYNOPSIS
-#+    install_wm_keyboard
-#%
-#% DESCRIPTION
-#%    This script installs, sets up and enables a wm (bspwm) 
+# DESCRIPTION
+#%    This script installs, sets up and enables a wm (bspwm)
 #%    and an on-screen keyboard (onboard).
 #%    Intended for OS2displayPC.
-#%
-#================================================================
-#- IMPLEMENTATION
-#-    version         install_wm_keyboard (magenta.dk) 0.0.1
-#-    author          Marcus
-#-    copyright       Copyright 2021, Magenta Aps"
-#-    license         GNU General Public License
 #-    email           mfm@magenta.dk
-#-
-#================================================================
-#  HISTORY
-#     2021/02/17 : marcus : Script launched
-#
-#================================================================
-# END_OF_HEADER
-#================================================================
 
 # PREREQUISITES:
 # 1. OS2displayPC - Installer Chromium
 # 2. OS2displayPC - Autostart Chromium
 
-# Would like to skip installing sxhkd but it's not trivial to do as it's 
+# Would like to skip installing sxhkd but it's not trivial to do as it's
 # classified as a "required dependency" for bspwm
 
 set -ex
 
+lower() {
+    echo "$@" | tr '[:upper:]' '[:lower:]'
+}
+
 [ -z "$1" ] && exit 1
 
-URL=$1
+ACTIVATE="$(lower "$1")"
 
+CHROMIUM_SCRIPT='/usr/share/os2borgerpc/bin/start_chromium.sh'
 USER=chrome
+XINITRC="/home/$USER/.xinitrc"
 # Note: Only the Compact keyboard layout is changed to not have Ctrl, Alt etc.
 ONBOARD_OPTIONS="--theme=/usr/share/onboard/themes/HighContrast.theme --layout /usr/share/onboard/layouts/Compact.onboard"
+# For apt installations/removals
+export DEBIAN_FRONTEND=noninteractive
 
-# Keyboard options: onboard (~100 mb incl. dependencies?), xvkbd (almost no 
-# dependencies), florence (~500 mb incl.  dependencies?!), 
-# gnome onscreen keyboard, carabou
-# TODO: Consider moving language-pack-da to install_dependencies.sh?
-apt-get update
-apt-get install -y language-pack-da bspwm onboard lemonbar- dmenu-
+if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] || \
+   [ "$ACTIVATE" != 'no' ] && [ "$ACTIVATE" != 'nej' ]; then
 
-cd /home/$USER || exit 1
-# Make the directory for the config
-# -p is also there to suppress errors in case someone re-runs this script, 
-# and it already exists
-mkdir -p .config/bspwm
+  # Keyboard options: onboard (~100 mb incl. dependencies?), xvkbd (almost no
+  # dependencies), florence (~500 mb incl. dependencies?!),
+  # gnome onscreen keyboard, carabou
+  # TODO: language-pack-da is now in install_dependencies.sh but older installs
+  # ran a previous version of that, so keeping it here too
+  apt-get update
+  apt-get install -y language-pack-da bspwm onboard lemonbar- dmenu-
 
-# onboard: If we want a non-default keyboard theme this is apparently necessary
-# because it attempts to create a file in there
-mkdir -p .config/dconf
-chown $USER:$USER .config/dconf
+  cd /home/$USER || exit 1
+  # Make the directory for the config
+  # -p is also there to suppress errors in case someone re-runs this script,
+  # and it already exists
+  mkdir -p .config/bspwm
 
-# Configure bspwm 
+  # onboard: If we want a non-default keyboard theme this is apparently necessary
+  # because it attempts to create a file in there
+  mkdir -p .config/dconf
+  chown $USER:$USER .config/dconf
+
+  # Configure bspwm
 cat << EOF > .config/bspwm/bspwmrc
 #! /bin/sh
 
@@ -91,7 +82,8 @@ bspc rule -a Onboard state=tiled layer=normal
 # doesn't matter right now because the button to show them is no longer there.
 # bspc rule -a "Onboard Preferences" layer=below flag=hidden
 
-chromium-browser --kiosk $URL --password-store=basic --autoplay-policy=no-user-gesture-required --disable-translate --enable-offline-auto-reload &
+# Launch chromium
+$CHROMIUM_SCRIPT wm &
 
 # we want æøå on the keyboard
 setxkbmap dk
@@ -103,7 +95,7 @@ while ! bspc query -N -n .leaf > /dev/null; do
   sleep 0.5
 done
 
-# First time setup of onboard. Attempt at solving a bug where the keyboard 
+# First time setup of onboard. Attempt at solving a bug where the keyboard
 # doesn't appear, seemingly due to first time initialization
 if [ ! -f /home/$USER/.config/dconf/user ]; then
   onboard $ONBOARD_OPTIONS &
@@ -117,20 +109,24 @@ fi
 onboard $ONBOARD_OPTIONS &
 EOF
 
-# Give it the same permissions as /usr/share/doc/bspwm/examples/bspwmrc
-chmod 755 .config/bspwm/bspwmrc
+  # Give it the same permissions as /usr/share/doc/bspwm/examples/bspwmrc
+  chmod 755 .config/bspwm/bspwmrc
 
-# Comment out auto-starting chromium
-sed -i "s/\(exec chromium-browser.*\)/#\1/" .xinitrc
+  # Don't auto-start chromium from xinitrc
+  sed -i "s,\(.*$CHROMIUM_SCRIPT.*\),#\1," $XINITRC
 
-# Autostart this instead
-cat << EOF >> .xinitrc
+  # Instead start autostarting bspwm - don't add it multiple times though
+if ! grep -q -- 'exec bspwm' "$XINITRC"; then
+cat << EOF >> "$XINITRC"
 exec bspwm
 EOF
+fi
 
+  # Backup the original Compact layout
+  cp /usr/share/onboard/layouts/Compact.onboard /usr/share/onboard/layouts/Compact_orig.onboard
 
-# Use our own Onboard model without ctrl, alt, super etc.
-# This is simply the original file with several sections (keys) commented out.
+  # Use our own Onboard model without ctrl, alt, super etc.
+  # This is simply the original file with several sections (keys) commented out.
 cat << EOF > /usr/share/onboard/layouts/Compact.onboard
 <?xml version="1.0" ?>
 <!-- OS2displayPC: Comment out Control, Alt, Quit and Settings buttons -->
@@ -358,5 +354,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 </keyboard>
 EOF
 
-# Give it the same permission as the file it overwrites
-chmod 644 /usr/share/onboard/layouts/Compact.onboard
+  # Give it the same permission as the file it overwrites
+  chmod 644 /usr/share/onboard/layouts/Compact.onboard
+
+else # Go back to not using a wm or the onscreen keyboard
+
+  apt-get remove -y bspwm onboard
+  apt-get autoremove -y
+
+  # Restore the original Compact layout in case it hasn't been deleted - ignore
+  # errors if fx. the dir no longer exists.
+  # true is here to prevent stopping if set -e is set
+  cp /usr/share/onboard/layouts/Compact_orig.onboard /usr/share/onboard/layouts/Compact.onboard 2>/dev/null || true
+
+  # Start chromium from xinitrc instead of bspwm
+  sed -i "s,#\(.*$CHROMIUM_SCRIPT.*\),\1," $XINITRC
+  sed -i "/\(exec bspwm\)/d" $XINITRC
+fi
