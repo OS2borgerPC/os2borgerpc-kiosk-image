@@ -159,9 +159,11 @@ This process consists, for each computer, of the following steps:
 1. Run these scripts in any order on the target computer.
    You don't have to wait for one to finish before you run the next one:
 
-   - **OS2borgerPC - Hook support**
-   - **OS2borgerPC hook - Beskyt konfiguration**
-   - **OS2borgerPC hook - Etablér netforbindelse før tjek-ind**
+   * **OS2borgerPC - Hook support**
+   * | **OS2borgerPC hook - Beskyt konfiguration**
+     | Use the parameter "ja".
+   * | **OS2borgerPC hook - Etablér netforbindelse før tjek-ind**
+     | Use the parameter "ja".
 
 2. Run the script **OS2DisplayPC opdater til Ubuntu 20.04 (1)** on the target
 computer. This will reboot the computer and leave the job in state
