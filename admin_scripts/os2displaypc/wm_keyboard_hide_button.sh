@@ -2,9 +2,12 @@
 
 # Add a button to show/hide the onscreen keyboard
 # ...or more precisely it toggles fullscreen on the browser
+#
 # Arguments:
 # 1: Whether to install / uninstall the button
 # 2: The name of the process (e.g. a browser) that should be full screened
+# 3: The background image to use for the GTK window (keyboard toggle button)
+#
 # Author: mfm@magenta.dk
 
 set -ex
@@ -15,14 +18,16 @@ lower() {
     echo "$@" | tr '[:upper:]' '[:lower:]'
 }
 
-[ $# != 2 ] \
-  && printf "This script needs exactly two arguments which it wasn't given. Exiting." \
+[ $# != 3 ] \
+  && printf "This script needs exactly three arguments which it wasn't given. Exiting." \
   && exit 1
 
 ACTIVATE="$(lower "$1")"
 # Needs to be a valid process name - technically it can be any program
 # Tested values: chromium
 BROWSER="$(lower "$2")"
+BUTTON_ICON_PATH="$3"
+
 
 CUSER=chrome
 BSPWM_CONFIG="/home/$CUSER/.config/bspwm/bspwmrc"
@@ -46,7 +51,7 @@ if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
   # Install some dependencies
 
   # Could also use cut or something so jq isn't needed
-  apt-get install --assume-yes xdotool jq
+  apt-get install --assume-yes xdotool jq fonts-noto-color-emoji
 
   # We also need python gi for the gtk button if it hasn't been installed yet.
   # And maybe other things?
@@ -56,21 +61,44 @@ if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
 
   ### FULLSCREEN TOGGLING BUTTON ###
 
+  # TODO: Find way to include the background image in there, or make it
+  # customizable and send him the png?
+
   # To style a button (e.g. change its background color) we need a CSS file:
 	cat <<- EOF > $SCRIPTS_BASE_PATH/$BUTTON_STYLING_CSS_FILE
-		.our-button { background: maroon; color: white; font-size: 30px; }
-    .our-window { background: black; }
+		/* Turn a caret into an arrow down */
+		.our-button { background: transparent; color: white; border: none; font-size: 50px; margin: 0;}
+		.our-window { border: none; margin: 0; opacity: 0.5; background: url("$SCRIPTS_BASE_PATH/bg.png"); background-size: contain; }
+		/*.our-window { border: none; margin: 0; opacity: 0.5; background: black; }*/
 	EOF
+
+  # Note that if the font-size is specified in the CSS, the size here is of
+  # no importance to the button
+  mkdir --parents /home/$CUSER/.config/gtk-3.0
+	cat <<- EOF > /home/$CUSER/.config/gtk-3.0/settings.ini
+  [Settings]
+  gtk-font-name = Noto Color Emoji 15
+	EOF
+
+	cat <<- EOF > /home/$CUSER/.config/gtk-3.0/gtk.css
+		.window-frame {
+		  box-shadow: none;
+		  margin: 0;
+		}
+	EOF
+
+  # Move the uploaded bg image to the location where we load it from
+  cp "$BUTTON_ICON_PATH" $SCRIPTS_BASE_PATH/bg.png
 
 	cat <<- EOF > "$BUTTON_SCRIPT"
 		#! /usr/bin/env python3
 		
 		# "Rules for positioning and sizing floating windows":
-    # https://github.com/baskerville/bspwm/issues/263
-    # Other resources used:
+		# https://github.com/baskerville/bspwm/issues/263
+		# Other resources used:
 		# https://www.youtube.com/watch?v=rVjGiOiDl4M
-    # https://wiki.archlinux.org/title/GTK#Basic_theme_configuration
-    # https://mail.gnome.org/archives/gtk-app-devel-list/2016-August/msg00021.html
+		# https://wiki.archlinux.org/title/GTK#Basic_theme_configuration
+		# https://mail.gnome.org/archives/gtk-app-devel-list/2016-August/msg00021.html
 		
 		# For calling the script that toggles fullscreen for firefox
 		from subprocess import call
@@ -80,15 +108,16 @@ if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
 		gi.require_version('Gtk', '3.0')
 		from gi.repository import Gtk, Gdk, Gio  # noqa: E402
 		
-		WIDTH = 75
-		HEIGHT = 7
+		WIDTH = 57
+		HEIGHT = 5
 		
 		
 		# Customize Gtk.window to have our keyboard button
 		class MyWindow(Gtk.Window):
-		    def setup_background_colors(self):
+		    # Just a custom function to gather all the logic to actually read a CSS file 
+		    def setup_css(self):
 		        provider = Gtk.CssProvider()
-		        provider.load_from_file(Gio.File.new_for_path("$SCRIPTS_BASE_PATH/btn.css"))
+		        provider.load_from_file(Gio.File.new_for_path("$SCRIPTS_BASE_PATH/$BUTTON_STYLING_CSS_FILE"))
 		        Gtk.StyleContext.add_provider_for_screen(
 		            Gdk.Screen.get_default(),
 		            provider,
@@ -96,25 +125,24 @@ if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
 		
 		    def __init__(self):
 		        Gtk.Window.__init__(self, title="Hello")
-		        self.setup_background_colors()
+		        self.setup_css()
 		        # Text to appear on the button
-		        self.btn = Gtk.Button(label="^")
-            # Note: To support emojis install fx. fonts-noto-color-emoji
-            #        ...and set this in .config/gtk-3.0/settings.ini:
-            #        [Settings]
-            #        gtk-font-name = Noto Color Emoji 15
-            #        OR set it with CSS?
+		        #self.btn = Gtk.Button(label="^")
+		        # Note: To support emojis install fx. fonts-noto-color-emoji
 		        #self.btn = Gtk.Button(label="🎹")
+		        #self.btn = Gtk.Button(label="🔽")
+		        #self.btn = Gtk.Button(label="⌨")
+		        self.btn = Gtk.Button()
 		        self.btn.connect("clicked", self.btn_pressed)
 		        self.add(self.btn)
-		        # Size of the button
+		        # Size of the button, unfortunately GTK doesn't seem to care
 		        self.set_size_request(WIDTH, HEIGHT)
 		        self.btn.set_size_request(WIDTH, HEIGHT)
 		        self.set_default_size(WIDTH, HEIGHT)
-		        # Set the background color specified in the CSS file above 
-            # on both the window and the button itself
+		        # Apply the CSS attributes specified in the CSS file above 
 		        self.get_style_context().add_class('our-window')
 		        self.btn.get_style_context().add_class('our-button')
+		        # Deprecated way of setting background color
 		        # Gtk.Window.override_background_color(self.btn, Gtk.StateType.NORMAL, Gdk.RGBA(255,0,0,0))
 		
 		    # Button handler
@@ -136,7 +164,7 @@ if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
 		WINDOW_TO_MOVE="Btn.py"
 		
 		# Try to match the black border margin of the keyboard, ish
-		X_OFFSET=8
+		X_OFFSET=16
 		
 		# 1. isolate line with the current resolution
 		# 2. isolate resolution
@@ -145,7 +173,7 @@ if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
 		# Adjusting Y_OFFSET based off subtracting button height * 2 (set in btn.py)
 		# Update: Would LIKE to adjust based off button height, but GTK/bspwm is not
 		# respecting the sizes I've set, so...
-		Y_OFFSET_ADJUSTED=\$((Y_OFFSET - 25))
+		Y_OFFSET_ADJUSTED=\$((Y_OFFSET - 26))
 		
 		for line in \$(bspc query -N -n .leaf | xargs -n 1 bspc query -T -n); do
 		  if echo "\$line" | grep -q "\$WINDOW_TO_MOVE"; then
