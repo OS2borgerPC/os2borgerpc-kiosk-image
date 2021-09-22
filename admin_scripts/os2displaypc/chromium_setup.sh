@@ -11,8 +11,9 @@ WIDTH=$3
 HEIGHT=$4
 ORIENTATION=$5
 
-# Setup Chromium user
-useradd chrome -m -p 12345 -s /bin/bash -U
+# Setup Chromium user.
+# useradd will fail on multiple runs, so suppress that error
+useradd chrome -m -p 12345 -s /bin/bash -U || true
 chfn -f Chrome chrome
 
 # Autologin default user
