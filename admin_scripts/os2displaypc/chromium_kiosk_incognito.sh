@@ -1,6 +1,6 @@
 #! /usr/bin/env sh
 
-# Toggles kiosk and/or incognito mode for OS2DisplayPC Chromium
+# Toggles kiosk and/or incognito mode for OS2borgerPC Kiosk Chromium
 # Why incognito?: If kiosk is disabled the browser will begin to remember
 # cookies after restart. If you don't want that you can enable incognito.
 #
