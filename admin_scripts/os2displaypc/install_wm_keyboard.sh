@@ -7,8 +7,8 @@
 #-    email           mfm@magenta.dk
 
 # PREREQUISITES:
-# 1. OS2display - Installer Chromium
-# 2. OS2display - Autostart Chromium
+# 1. OS2borgerPC Kiosk - Installer Chromium
+# 2. OS2borgerPC Kiosk - Autostart Chromium
 
 # Would like to skip installing sxhkd but it's not trivial to do as it's
 # classified as a "required dependency" for bspwm
