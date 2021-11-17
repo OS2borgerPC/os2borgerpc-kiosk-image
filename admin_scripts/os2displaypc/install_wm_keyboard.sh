@@ -3,7 +3,7 @@
 # DESCRIPTION
 #%    This script installs, sets up and enables a wm (bspwm)
 #%    and an on-screen keyboard (onboard).
-#%    Intended for using OS2borgerPC Kiosk with OS2display.
+#%    Intended for OS2borgerPC Kiosk
 #-    email           mfm@magenta.dk
 
 # PREREQUISITES:
