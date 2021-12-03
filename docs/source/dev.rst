@@ -1,8 +1,8 @@
 Technical Documentation
 =======================
 
-How to install and run the OS2display solution
-**********************************************
+How to install and run OS2borgerPC Kiosk
+****************************************
 
 Install OS2borgerPC server image
 --------------------------------
@@ -102,27 +102,27 @@ connect to the admin system.
 
 
 
-Setting up for OS2display
--------------------------
+Setting up for Kiosk
+--------------------
 
 Once the computer is connected to the admin system and activated, you
-may deploy OS2display to it.
+may set it up to run as a kiosk.
 
 In the admin system, we have introduced three global scripts with the
-prefix "OS2displayPC".
+prefix "OS2borgerPC Kiosk".
 
-The first is called "OS2displayPC  - Installer Chromium" and will
+The first is called "OS2borgerPC Kiosk  - Installer Chromium" and will
 install the browser and setup minimum GUI capabilities. 
 
 When this script has run successfully, you can configure Chromium to
 start automatically on boot and configure the start URL and time delay
-as needed. You do this by running the script called "OS2displayPC - Autostart
+as needed. You do this by running the script called "OS2borgerPC Kiosk - Autostart
 Chromium".
 
 In this script, you must specify the following four parameters:
 
 * ``time`` - a delay time before Chromium is started.
-* ``url`` - the OS2display start URL.
+* ``url`` - the start URL for your kiosk, e.g. an OS2display site.
 * ``width`` - the width (X) component of the desired screen resolution, e.g.
   "1980".
 * ``height`` - the height component of the desired screen resolution, e.g.
@@ -135,7 +135,7 @@ The width and height parameters must correspond to the preferred
 (maximum) screen resolution of your monitor.
 
 In order to have remote access to this system, you need to run the
-script called "OS2displayOS  - Installer SSH og VNC". After this, you'll
+script called "OS2borgerPC Kiosk  - Installer SSH og VNC". After this, you'll
 be able to SSH to the machine and to see its display by connecting with
 a VNC client.
 
@@ -151,48 +151,8 @@ a VNC client.
     parameter for this script.
 
 
-
-Upgrade OS2displayPC from Ubuntu 16.04 to 20.04
-***********************************************
-
-This process consists, for each computer, of the following steps:
-
-1. Run these scripts in any order on the target computer.
-   You don't have to wait for one to finish before you run the next one:
-
-   * **OS2borgerPC - Hook support**
-   * | **OS2borgerPC hook - Beskyt konfiguration**
-     | Use the parameter "ja".
-   * | **OS2borgerPC hook - Etablér netforbindelse før tjek-ind**
-     | Use the parameter "ja".
-
-2. Run the script **OS2DisplayPC opdater til Ubuntu 20.04 (1)** on the target
-computer. This will reboot the computer and leave the job in state
-*Afsendt*.
-
-3. Now run the script **OS2DisplayPC opdater til Ubuntu 20.04 (2)** on the
-target computer. This will take some time - do not send further commands
-until the job has succeeded and is seen to be in state *Udført*.
-
-4. Reboot the computer by running the script **System - Genstart
-computeren**.
-
-5. Run the script **OS2DisplayPC opdater til Ubuntu 20.04 (3)**. Once
-again, this will take some time, and you should wait until the job has
-succeeded and is seen to be in state *Udført*.
-
-6. Reboot the computer as in 4).
-
-7. Run the script **OS2DisplayPC opdater til Ubuntu 20.04 (4)**. This
-will *not* take a long time, the OS upgrade is done by now.
-
-8. Reboot the computer as in 4) and 6) - after restart, the upgrade to Ubuntu
-20.04 is complete.
-
-
-
-How to build the DisplayPC ISO image
-************************************
+How to build the OS2borgerPC Kiosk ISO image
+********************************************
 
 In order to build the ISO image, use a Ubuntu 20.04 Server Edition
 installation CD and basically follow the instructions on this page:
@@ -231,6 +191,11 @@ include the packages (``.deb`` files) in a bespoke directory in the ISO
 and install them directly with ``dpkg -i``, either in a ``late_command``
 or using a script.
 
+The ``wifi_setup`` script currently expect such packages to exist in the
+directory ``scripts/wifi`` - as we need to be able to set up wifi
+without a network connection, while we should, a the same time, never
+enable wifi unless we know that it's necessary.
+
 Alternatively, you could make them officially part of the image by
 adding them in ``pool/extras``.  This, however, requires you to unsquash
 the embedded ``squashfs`` file system, update the package lists,
@@ -256,9 +221,9 @@ If you *did* add debs to ``pool/extras``, please note:
 
 Once you're ready to create the ISO image for installation, run: ::
 
-    xorriso -as mkisofs -r   -V os2displaypc   -o os2displaypc-1.0.0rc1.iso   -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot   -boot-load-size 4 -boot-info-table   -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot   -isohybrid-gpt-basdat -isohybrid-apm-hfsplus   -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin iso/boot iso
+    xorriso -as mkisofs -r   -V os2borgerpc_kiosk   -o os2borgerpc_kiosk-1.0.0rc1.iso   -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot   -boot-load-size 4 -boot-info-table   -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot   -isohybrid-gpt-basdat -isohybrid-apm-hfsplus   -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin iso/boot iso
 
-where "os2displaypc" and "os2displaypc-1.0.0rc1.iso" should be replaced
+where "os2borgerpc_kiosk" and "os2borgerpc_kiosk-1.0.0rc1.iso" should be replaced
 by what you wish the tag and filename of the ISO image to be.
 
 You'll need to install the necessary dependencies to create the ISO - on
