@@ -15,7 +15,7 @@ public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/pro
 .. toctree::
    :maxdepth: 2
 
-   dev
+   technical_documentation
    readme
    news
 
