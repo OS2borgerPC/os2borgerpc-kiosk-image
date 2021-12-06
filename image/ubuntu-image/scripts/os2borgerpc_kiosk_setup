@@ -30,7 +30,7 @@ PRODUCT="os2borgerpc kiosk"
 set_os2borgerpc_config os2_product "$PRODUCT"
 
 # Set version in configuration
-VERSION=$(cat "$DIR"/../../../VERSION)
+VERSION=$(cat "$DIR"/VERSION)
 set_os2borgerpc_config os2borgerpc_version "$VERSION"
 
 #  Connect to the admin system
