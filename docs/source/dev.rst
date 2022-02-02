@@ -1,5 +1,5 @@
-How to install and run the OS2display solution
-==============================================
+How to install and run OS2borgerPC Kiosk
+****************************************
 
 Install OS2borgerPC server image
 --------------------------------
@@ -46,6 +46,7 @@ Remove the install media and reboot. You'll be able to login as the user
 .. danger:: 
     Please change this password *immediately* after deploying each
     server!! There's a script in OS2borgerPC Admin to do this.
+
 
 
 Getting network
@@ -98,27 +99,27 @@ connect to the admin system.
 
 
 
-Setting up for OS2display
--------------------------
+Setting up for Kiosk
+--------------------
 
 Once the computer is connected to the admin system and activated, you
-may deploy OS2display to it.
+may set it up to run as a kiosk.
 
 In the admin system, we have introduced three global scripts with the
-prefix "OS2displayPC".
+prefix "OS2borgerPC Kiosk".
 
-The first is called "OS2displayPC  - Installer Chromium" and will
+The first is called "OS2borgerPC Kiosk  - Installer Chromium" and will
 install the browser and setup minimum GUI capabilities. 
 
 When this script has run successfully, you can configure Chromium to
 start automatically on boot and configure the start URL and time delay
-as needed. You do this by running the script called "OS2displayPC - Autostart
+as needed. You do this by running the script called "OS2borgerPC Kiosk - Autostart
 Chromium".
 
 In this script, you must specify the following four parameters:
 
 * ``time`` - a delay time before Chromium is started.
-* ``url`` - the OS2display start URL.
+* ``url`` - the start URL for your kiosk, e.g. an OS2display site.
 * ``width`` - the width (X) component of the desired screen resolution, e.g.
   "1980".
 * ``height`` - the height component of the desired screen resolution, e.g.
@@ -131,7 +132,7 @@ The width and height parameters must correspond to the preferred
 (maximum) screen resolution of your monitor.
 
 In order to have remote access to this system, you need to run the
-script called "OS2displayOS  - Installer SSH og VNC". After this, you'll
+script called "OS2borgerPC Kiosk  - Installer SSH og VNC". After this, you'll
 be able to SSH to the machine and to see its display by connecting with
 a VNC client.
 

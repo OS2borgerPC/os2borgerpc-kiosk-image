@@ -3,14 +3,14 @@
 if [[ $UID -ne 0 ]]
 then
 	echo "Denne kommando skal køres som root"
-	exit
+	exit 1
 fi
 
 # Setup the OS2BorgerPC client on an Ubuntu Server
 
 DIR=$(dirname ${BASH_SOURCE[0]})
 
-# Avoid script stopping because it wants user input.
+# Avoid script stopping because it wants user input
 export DEBIAN_FRONTEND=noninteractive
 
 # Install all necessary packages and dependencies
@@ -25,6 +25,13 @@ SECURITY_DIR=/etc/os2borgerpc/security/
 mkdir -p $SECURITY_DIR
 cp -r ${DIR}/security/* "$SECURITY_DIR"
 
-#  Connect to the admin system
+# Set product in configuration
+PRODUCT="os2borgerpc kiosk"
+set_os2borgerpc_config os2_product "$PRODUCT"
 
+# Set version in configuration
+VERSION=$(cat "$DIR"/VERSION)
+set_os2borgerpc_config os2borgerpc_version "$VERSION"
+
+#  Connect to the admin system
 register_new_os2borgerpc_client.sh
