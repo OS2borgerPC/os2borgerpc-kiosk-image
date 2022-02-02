@@ -1,3 +1,12 @@
+Version 1.1.0 Februar 2, 2022
+-----------------------------
+
+Changes in this version:
+
+- Upgraded to Ubuntu 20.04.3, including package versions on image.
+- Documentation updated, name changed to OS2borgerPC Kiosk.
+
+
 Version 1.0.0 January 20, 2021
 --------------------------------
 
