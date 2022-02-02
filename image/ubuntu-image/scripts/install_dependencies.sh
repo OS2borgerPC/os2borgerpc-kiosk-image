@@ -73,7 +73,7 @@ apt-get -y install language-pack-da
 timedatectl set-timezone Europe/Copenhagen
 sed -i 's/# \(da_DK.UTF-8 UTF-8\)/\1/'  /etc/locale.gen
 dpkg-reconfigure --frontend=noninteractive tzdata
-update-locale LANG=da_DK.UTF-8
+update-locale LANG=da_DK.utf-8
 
 # Update the time accordingly
 ntpdate pool.ntp.org
