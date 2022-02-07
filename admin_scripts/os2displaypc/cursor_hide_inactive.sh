@@ -8,19 +8,20 @@ ACTIVATE="$(lower "$1")"
 
 export DEBIAN_FRONTEND=noninteractive
 FILE="/home/chrome/.xinitrc"
+PROGRAM="unclutter-xfixes"
 
 apt-get update --assume-yes
 
 if [ "$ACTIVATE" != 'false' ] && [ "$ACTIVATE" != 'falsk' ] && \
    [ "$ACTIVATE" != 'no' ] && [ "$ACTIVATE" != 'nej' ]; then
 
-  apt-get install --assume-yes unclutter
+  apt-get install --assume-yes $PROGRAM
 
-  if ! grep -q -- "unclutter" "$FILE"; then
+  if ! grep --quiet -- "$PROGRAM" "$FILE"; then
     # 3 i means: Insert on line 3
-    sed --in-place '3 i unclutter &' $FILE
+    sed --in-place "3 i $PROGRAM &" $FILE
   fi
 else
-  sed -i '/unclutter/d' $FILE
-  apt-get --assume-yes remove unclutter
+  sed -i "/$PROGRAM/d" $FILE
+  apt-get --assume-yes remove $PROGRAM
 fi
