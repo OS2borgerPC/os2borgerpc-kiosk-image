@@ -88,7 +88,7 @@ Connect to OS2borgerPC admin
 
 Once you're connected to the network, enter the command::
 
-    sudo os2borgerpc_server_setup
+    sudo os2borgerpc_kiosk_setup
 
 This will install all dependencies for the OS2borgerPC client and
 connect to the admin system.
