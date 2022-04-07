@@ -47,6 +47,14 @@ Remove the install media and reboot. You'll be able to login as the user
     Please change this password *immediately* after deploying each
     server!! There's a script in OS2borgerPC Admin to do this.
 
+.. note:: 
+    Sometimes log output from programs running in the background during 
+   the installation will continue to print out **after** the login prompt
+   has appeared. This does not prevent you from logging in, however.
+   You can simply type in the name superuser and press enter, and the
+   request for the password should pop up, and you'll be logged in.
+
+.. image:: install_2.png
 
 
 Getting network
