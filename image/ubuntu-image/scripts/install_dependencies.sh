@@ -5,7 +5,7 @@
 DIR=$(dirname ${BASH_SOURCE[0]})
 
 # Install OS2bogerPC specific dependencies
-#           
+#
 # The DEPENDENCIES file contains packages/programs
 # required by OS2borgerPC AND extra packages which are free dependencies
 # of Skype and MS Fonts - to shorten the postinstall process.
@@ -25,8 +25,8 @@ done
 
 if [ "$PKGSTOINSTALL" != "" ]; then
     echo  -n "Some dependencies are missing."
-    echo " The following packages will be installed: $PKGSTOINSTALL" 
-    
+    echo " The following packages will be installed: $PKGSTOINSTALL"
+
     # Step 1: Check for valid APT repositories.
 
     apt-get update &> /dev/null
@@ -66,7 +66,7 @@ fi
 pip3 install os2borgerpc-client
 
 # Install Danish language package
-apt-get -y install language-pack-da
+apt-get -y install language-pack-da language-pack-da-base
 
 # Set Danish locale and timezone, e.g. for usage
 # with Aula and attached/onscreen keyboards
