@@ -44,6 +44,7 @@ Remove the install media and reboot.
 The login screen may contain output related to the upstart process:
 
 .. image:: install_3.png
+
 This is not a problem and you'll be able to login as the user ``superuser`` with password ``superuser``.
 
 
