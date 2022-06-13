@@ -39,8 +39,13 @@ asked to "Confirm destructive action". To proceed, select "Continue".
 
 The system will now install - this will take some time.
 
-Remove the install media and reboot. You'll be able to login as the user
-``superuser`` with password ``superuser``.
+Remove the install media and reboot.
+
+The login screen may contain output related to the upstart process:
+
+.. image:: install_3.png
+
+This is not a problem and you'll be able to login as the user ``superuser`` with password ``superuser``.
 
 
 .. danger:: 
