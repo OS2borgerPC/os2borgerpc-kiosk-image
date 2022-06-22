@@ -26,6 +26,7 @@ autoinstall:
 
   late-commands:
     - cp -r /cdrom/scripts/* /target/usr/local/bin
+    - chmod -R 700 /home/superuser
 
   version: 1
   interactive-sections:
