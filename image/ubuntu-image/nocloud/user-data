@@ -8,8 +8,12 @@ autoinstall:
       uri: http://dk.archive.ubuntu.com/ubuntu
     - arches: [default]
       uri: http://ports.ubuntu.com/ubuntu-ports
-  identity: {hostname: os2borgerpc, password: $6$0y9sb.ZdlHsXbfSr$o6DKzeX02cKvmnQ/7qC5RRINRuBZNjCc/fBxwTwYuv9FipTiFkP.gxJdXWQIkhEL.oOI8YD2kdtlQQZVtHSd51,
-    realname: Superuser, username: superuser}
+  identity: {
+    hostname: os2borgerpc,
+    password: $6$0y9sb.ZdlHsXbfSr$o6DKzeX02cKvmnQ/7qC5RRINRuBZNjCc/fBxwTwYuv9FipTiFkP.gxJdXWQIkhEL.oOI8YD2kdtlQQZVtHSd51,
+    realname: Superuser,
+    username: superuser
+  }
   keyboard: {layout: dk, toggle: null, variant: ''}
   locale: en_US
   # network:
@@ -26,7 +30,6 @@ autoinstall:
 
   late-commands:
     - cp -r /cdrom/scripts/* /target/usr/local/bin
-    - chmod -R 700 /home/superuser
 
   version: 1
   interactive-sections:

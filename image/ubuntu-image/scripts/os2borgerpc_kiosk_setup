@@ -13,6 +13,9 @@ DIR=$(dirname ${BASH_SOURCE[0]})
 # Avoid script stopping because it wants user input
 export DEBIAN_FRONTEND=noninteractive
 
+# Set proper, restricted permissions on superuser homedir
+chmod -R 700 /home/superuser
+
 # Install all necessary packages and dependencies
 $DIR/install_dependencies.sh
 
