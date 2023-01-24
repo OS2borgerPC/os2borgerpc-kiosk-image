@@ -1,10 +1,10 @@
 How to install and run OS2borgerPC Kiosk
 ****************************************
 
-Install OS2borgerPC server image
---------------------------------
+Install OS2borgerPC Kiosk image
+-------------------------------
 
-Get the most recent OS2borgerPC server image as provided by Magenta,
+Get the most recent OS2borgerPC Kiosk image as provided by Magenta,
 or build one yourself according to the instructions in the ``image``
 directory.
 

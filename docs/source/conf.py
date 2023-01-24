@@ -19,7 +19,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "os2borgerpc-server-image"
+project = "os2borgerpc-kiosk-image"
 copyright = "2021, Magenta ApS"
 author = "Magenta ApS"
 
@@ -100,7 +100,7 @@ html_static_path = []
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "os2borgerpc-server-imagedoc"
+htmlhelp_basename = "os2borgerpc-kiosk-imagedoc"
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -126,8 +126,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "os2borgerpc-server-image.tex",
-        "os2borgerpc-server-image Documentation",
+        "os2borgerpc-kiosk-image.tex",
+        "os2borgerpc-kiosk-image Documentation",
         "Magenta ApS",
         "manual",
     )
@@ -141,8 +141,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "os2borgerpc-server-image",
-        "os2borgerpc-server-image Documentation",
+        "os2borgerpc-kiosk-image",
+        "os2borgerpc-kiosk-image Documentation",
         [author],
         1,
     )
@@ -157,10 +157,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "os2borgerpc-server-image",
-        "os2borgerpc-server-image Documentation",
+        "os2borgerpc-kiosk-image",
+        "os2borgerpc-kiosk-image Documentation",
         author,
-        "os2borgerpc-server-image",
+        "os2borgerpc-kiosk-image",
         "One line description of project.",
         "Miscellaneous",
     )
