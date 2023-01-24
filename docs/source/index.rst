@@ -9,6 +9,7 @@ OS2BorgerPC - Kiosk Image
 
 Introduction
 ============
+
 OS2BorgerPC - Kiosk Image is the specialized Ubuntu distribution server image for audience PCs in
 public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/produkt/os2borgerpc>`_).
 
@@ -18,7 +19,7 @@ public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/pro
    technical_documentation
    readme
    news
-
+   upgrade
 
 Indices and tables
 ==================
