@@ -3,7 +3,7 @@ dns-root-data
 language-pack-da
 language-pack-da-base
 libbluetooth3
-libidn11
+libidn12
 libjansson4
 libmbim-glib4
 libmbim-proxy

@@ -34,5 +34,13 @@ set_os2borgerpc_config os2_product "$PRODUCT"
 VERSION=$(cat "$DIR"/VERSION)
 set_os2borgerpc_config os2borgerpc_version "$VERSION"
 
+# Run assorted scripts
+# Setup automatic security updates
+wget https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system/apt_periodic_control.sh | bash -s -- sikkerhed
+
+# Make apt-get wait 5 min for dpkg lock
+wget https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system/apt_get_config_set_dpkg_lock_timeout.sh | bash -s -- True
+
+
 #  Connect to the admin system
 register_new_os2borgerpc_client.sh

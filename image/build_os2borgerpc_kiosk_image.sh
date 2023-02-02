@@ -22,7 +22,7 @@ set -ex
 if [ "$CLEAN_BUILD" = "--clean" ]
 then
     # Note: If testing locally maybe comment this next line out and use the subsequent one instead, so wifi deps are kept
-    sudo rm -rf iso /tmp/build_installed_packages_list.txt scripts/wifi/*.deb
+    sudo rm -rf iso /tmp/build_installed_packages_list.txt scripts/wifi/*.deb boot_hybrid.img ubuntu22-server-amd64.efi
     # sudo rm -rf iso /tmp/build_installed_packages_list.txt
 fi
 
@@ -39,10 +39,27 @@ sudo apt download $(tr '\n' ' ' < deps.txt)
 
 popd
 
-xorriso -as mkisofs -r   -V "$IMAGE_NAME"   -o "$IMAGE_NAME.iso"   -J -l -b isolinux/isolinux.bin \
-    -c isolinux/boot.cat -no-emul-boot   -boot-load-size 4 -boot-info-table   -eltorito-alt-boot \
-    -e boot/grub/efi.img -no-emul-boot   -isohybrid-gpt-basdat -isohybrid-apm-hfsplus   \
-    -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin iso/boot iso
+mbr="boot_hybrid.img"
+
+efi="ubuntu22-server-amd64.efi"
+
+# Extract the MBR template
+
+dd if="$ISO_PATH" bs=1 count=446 of=$mbr
+
+# Extract EFI partition image
+
+skip=$(/sbin/fdisk -l "$ISO_PATH" | grep -F '.iso2 ' | awk '{print $2}')
+
+size=$(/sbin/fdisk -l "$ISO_PATH" | grep -F '.iso2 ' | awk '{print $4}')
+
+dd if="$ISO_PATH" bs=512 skip="$skip" count="$size" of=$efi
+
+xorriso -as mkisofs -r   -V "$IMAGE_NAME" -o "$IMAGE_NAME".iso   -J -joliet-long -l -iso-level 3 \
+    -partition_offset 16 --grub2-mbr $mbr --mbr-force-bootable -append_partition 2 0xEF $efi \
+    -appended_part_as_gpt -c boot.catalog -b boot/grub/i386-pc/eltorito.img -no-emul-boot \
+    -boot-load-size 4 -boot-info-table --grub2-boot-info  -eltorito-alt-boot \
+    -e '--interval:appended_partition_2:all::' -no-emul-boot iso
 
 if [ $? = 0 ]; then
     echo "$IMAGE_NAME.iso was successfully created"
