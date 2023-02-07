@@ -34,6 +34,24 @@ set_os2borgerpc_config os2_product "$PRODUCT"
 VERSION=$(cat "$DIR"/VERSION)
 set_os2borgerpc_config os2borgerpc_version "$VERSION"
 
+# Setup Chromium user
+USER="chrome"
+if ! id $USER &>/dev/null; then
+  useradd $USER -m -p 12345 -s /bin/bash -U
+fi
+
+# Setup autologin of default user
+mkdir -p /etc/systemd/system/getty@tty1.service.d
+
+# Note: The empty ExecStart is not insignificant!
+# By default the value is appended, so the empty line changes it to an override
+cat << EOF > /etc/systemd/system/getty@tty1.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --noissue --autologin $USER %I $TERM
+Type=idle
+EOF
+
 # Run assorted scripts
 # Setup automatic security updates
 wget https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system/apt_periodic_control.sh | bash -s -- sikkerhed
@@ -41,6 +59,8 @@ wget https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system
 # Make apt-get wait 5 min for dpkg lock
 wget https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system/apt_get_config_set_dpkg_lock_timeout.sh | bash -s -- True
 
+# Set danish language and timezone
+wget https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/os2borgerpc_kiosk/os2borgerpc_kiosk/set_datetime.sh | bash
 
 #  Connect to the admin system
 register_new_os2borgerpc_client.sh

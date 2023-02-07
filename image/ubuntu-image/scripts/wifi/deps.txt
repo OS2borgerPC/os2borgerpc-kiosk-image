@@ -18,6 +18,7 @@ libteamdctl0
 modemmanager
 network-manager
 network-manager-pptp
+ntpdate
 ppp
 pptp-linux
 usb-modeswitch
