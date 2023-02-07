@@ -52,6 +52,34 @@ ExecStart=-/sbin/agetty --noissue --autologin $USER %I $TERM
 Type=idle
 EOF
 
+# Create script to rotate screen
+
+cat << EOF > /usr/share/os2borgerpc/bin/rotate_screen.sh
+#!/usr/bin/env sh
+
+set -x
+
+TIME=\$1
+ORIENTATION=\$2
+
+sleep \$TIME
+
+export XAUTHORITY=/home/$USER/.Xauthority
+
+# --listactivemonitors lists the primary monitor first
+ALL_MONITORS=\$(xrandr --listactivemonitors | tail -n +2 | cut --delimiter ' ' --fields 6)
+
+# Make all connected monitors display what the first monitor displays, rather than them extending the desktop
+PRIMARY_MONITOR=\$(echo "\$ALL_MONITORS" | head -n 1)
+OTHER_MONITORS=\$(echo "\$ALL_MONITORS" | tail -n +2)
+echo "\$OTHER_MONITORS" | xargs -I {} xrandr --output {} --same-as "\$PRIMARY_MONITOR"
+
+# Rotate screen - and if more than one monitor, rotate them all.
+echo "\$ALL_MONITORS" | xargs -I {} xrandr --output {} --rotate \$ORIENTATION
+EOF
+
+chmod +x /usr/share/os2borgerpc/bin/rotate_screen.sh
+
 # Run assorted scripts
 # Setup automatic security updates
 wget -O - https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system/apt_periodic_control.sh | bash -s -- sikkerhed
