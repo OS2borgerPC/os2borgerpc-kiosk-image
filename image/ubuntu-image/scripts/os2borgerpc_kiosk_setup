@@ -80,6 +80,15 @@ EOF
 
 chmod +x /usr/share/os2borgerpc/bin/rotate_screen.sh
 
+# Fix dpkg settings
+cat << EOF > /etc/apt/apt.conf.d/local
+Dpkg::Options {
+   "--force-confdef";
+   "--force-confold";
+};
+Dpkg::Lock {Timeout "300";};
+EOF
+
 # Run assorted scripts
 # Setup automatic security updates
 wget -O - https://github.com/OS2borgerPC/os2borgerpc-scripts/raw/master/common/system/apt_periodic_control.sh | bash -s -- sikkerhed
