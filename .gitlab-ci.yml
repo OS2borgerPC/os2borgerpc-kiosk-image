@@ -20,8 +20,6 @@ variables:
 
 Build ISO image:
   stage: build
-  tags: 
-    - high-mem
   needs: []
   image: ubuntu:20.04
   before_script:
