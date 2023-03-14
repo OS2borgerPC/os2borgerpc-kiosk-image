@@ -39,6 +39,8 @@ sudo apt download $(tr '\n' ' ' < deps.txt)
 
 popd
 
+sudo cp ../VERSION iso/scripts/
+
 mbr="boot_hybrid.img"
 
 efi="ubuntu22-server-amd64.efi"
