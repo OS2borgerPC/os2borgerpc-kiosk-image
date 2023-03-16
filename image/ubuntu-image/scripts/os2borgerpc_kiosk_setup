@@ -13,6 +13,9 @@ DIR=$(dirname ${BASH_SOURCE[0]})
 # Avoid script stopping because it wants user input
 export DEBIAN_FRONTEND=noninteractive
 
+# Set proper, restricted permissions on superuser homedir
+chmod -R 700 /home/superuser
+
 # Install all necessary packages and dependencies
 $DIR/install_dependencies.sh
 
@@ -21,9 +24,7 @@ mkdir -p /var/lib/os2borgerpc/jobs
 chmod -R og-r /var/lib/os2borgerpc
 
 # Prepare to run security events
-SECURITY_DIR=/etc/os2borgerpc/security/
-mkdir -p $SECURITY_DIR
-cp -r ${DIR}/security/* "$SECURITY_DIR"
+mkdir -p /etc/os2borgerpc/security/
 
 # Set product in configuration
 PRODUCT="os2borgerpc kiosk"
@@ -32,6 +33,61 @@ set_os2borgerpc_config os2_product "$PRODUCT"
 # Set version in configuration
 VERSION=$(cat "$DIR"/VERSION)
 set_os2borgerpc_config os2borgerpc_version "$VERSION"
+
+# Setup Chromium user
+USER="chrome"
+if ! id $USER &>/dev/null; then
+  useradd $USER -m -p 12345 -s /bin/bash -U
+fi
+
+# Setup autologin of default user
+mkdir -p /etc/systemd/system/getty@tty1.service.d
+
+# Note: The empty ExecStart is not insignificant!
+# By default the value is appended, so the empty line changes it to an override
+cat << EOF > /etc/systemd/system/getty@tty1.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --noissue --autologin $USER %I $TERM
+Type=idle
+EOF
+
+# Create script to rotate screen
+mkdir --parents /usr/share/os2borgerpc/bin
+cat << EOF > /usr/share/os2borgerpc/bin/rotate_screen.sh
+#!/usr/bin/env sh
+
+set -x
+
+TIME=\$1
+ORIENTATION=\$2
+
+sleep \$TIME
+
+export XAUTHORITY=/home/$USER/.Xauthority
+
+# --listactivemonitors lists the primary monitor first
+ALL_MONITORS=\$(xrandr --listactivemonitors | tail -n +2 | cut --delimiter ' ' --fields 6)
+
+# Make all connected monitors display what the first monitor displays, rather than them extending the desktop
+PRIMARY_MONITOR=\$(echo "\$ALL_MONITORS" | head -n 1)
+OTHER_MONITORS=\$(echo "\$ALL_MONITORS" | tail -n +2)
+echo "\$OTHER_MONITORS" | xargs -I {} xrandr --output {} --same-as "\$PRIMARY_MONITOR"
+
+# Rotate screen - and if more than one monitor, rotate them all.
+echo "\$ALL_MONITORS" | xargs -I {} xrandr --output {} --rotate \$ORIENTATION
+EOF
+
+chmod +x /usr/share/os2borgerpc/bin/rotate_screen.sh
+
+# Fix dpkg settings
+cat << EOF > /etc/apt/apt.conf.d/local
+Dpkg::Options {
+   "--force-confdef";
+   "--force-confold";
+};
+Dpkg::Lock {Timeout "300";};
+EOF
 
 #  Connect to the admin system
 register_new_os2borgerpc_client.sh

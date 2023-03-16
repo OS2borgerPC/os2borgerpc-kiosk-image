@@ -1,0 +1,41 @@
+# Copyright (C) 2022 Magenta ApS, http://magenta.dk.
+# Contact: info@magenta.dk.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+stages:
+  - build
+
+variables:
+  ISO_SHA: ${CI_COMMIT_SHORT_SHA}
+  BUILD_IMAGE_VERSION: "22.04"
+  ISO_NAME: "ubuntu-22.04.2-live-server-amd64.iso"
+  RELEASE_NAME: "jammy"
+
+
+
+# Build stage
+#############
+
+
+Build ISO image:
+  stage: build
+  needs: []
+  image: ubuntu:${BUILD_IMAGE_VERSION}
+  before_script:
+    - apt-get -y update > /dev/null
+    - apt-get -y install fdisk wget sudo apt-utils figlet > /dev/null
+    - cd image
+    - wget --progress=bar:force --continue http://releases.ubuntu.com/${BUILD_IMAGE_VERSION}/${ISO_NAME}
+  script:
+    - ./build_os2borgerpc_kiosk_image.sh ./${ISO_NAME} ${ISO_SHA}
+  cache:
+    paths:
+      - image/${ISO_NAME}
+  artifacts:
+    paths:
+      - image/${ISO_SHA}.iso
+    expire_in: 1 week

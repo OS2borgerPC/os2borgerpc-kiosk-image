@@ -1,3 +1,12 @@
+Version 2.0.0 March 9, 2023
+---------------------------
+
+Changes in this version:
+
+- Upgraded to Ubuntu 22.04.2.
+- Build in user creation and screen rotation program
+- Make dpkg work more noninteractively by default
+
 Version 1.1.0 Februar 2, 2022
 -----------------------------
 
