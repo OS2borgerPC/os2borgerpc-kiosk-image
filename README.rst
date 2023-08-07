@@ -3,7 +3,7 @@ OS2borgerPC: Kiosk/Server Image
 ===============================
 
 This folder contains the source code for building a modified Ubuntu
-Kiosk/Server image (.iso file) for connection kiosk installations to the
+Kiosk/Server image (.iso file) for connecting kiosk installations to the
 OS2borgerPC admin system.
 
 This work was commissioned by Aarhus Kommune for their OS2display
