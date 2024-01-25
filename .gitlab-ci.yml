@@ -24,6 +24,7 @@ variables:
 Build ISO image:
   stage: build
   needs: []
+  when: manual
   image: ubuntu:${BUILD_IMAGE_VERSION}
   before_script:
     - apt-get -y update > /dev/null
