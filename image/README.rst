@@ -1,4 +1,3 @@
-
 How to build the OS2borgerPC Kiosk ISO image
 ********************************************
 

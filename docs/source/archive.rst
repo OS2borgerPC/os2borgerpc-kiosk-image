@@ -1,5 +1,8 @@
+Archive
+=======
+
 Upgrade OS2borgerPC Kiosk from Ubuntu 16.04 to 20.04
-====================================================
+----------------------------------------------------
 
 This process consists, for each computer, of the following steps:
 
