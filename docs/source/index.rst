@@ -16,10 +16,11 @@ public libraries in Denmark (Part of the `OS2BorgerPC system <https://os2.eu/pro
 .. toctree::
    :maxdepth: 2
 
-   technical_documentation
-   readme
+   install_setup
    news
-   upgrade
+   technical_documentation
+   archive
+   readme
 
 Indices and tables
 ==================
