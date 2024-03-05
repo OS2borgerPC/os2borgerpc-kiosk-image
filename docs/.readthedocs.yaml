@@ -6,7 +6,7 @@ version: 2
 
 # Set build options
 build:
-  os: ubuntu-lts-latest  # Required: The Docker image used for building the docs. 
+  os: ubuntu-lts-latest  # Required: The Docker image used for building the docs.
   tools: # At least one tool is required
     python: "latest"
 
@@ -15,11 +15,6 @@ sphinx:
   configuration: docs/source/conf.py
   # Fail on all warnings to avoid broken references
   fail_on_warning: true
-
-# Optionally build your docs in additional formats such as PDF and ePub
-# formats:
-#   - pdf
-#   - epub
 
 # Optional but recommended, declare the Python requirements required
 # to build your documentation
