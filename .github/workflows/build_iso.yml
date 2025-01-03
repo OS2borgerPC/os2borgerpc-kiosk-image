@@ -1,0 +1,74 @@
+name: Build and Release Custom Ubuntu ISO
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build-and-release-iso:
+    runs-on: ubuntu-22.04
+
+    env:
+      UBUNTU_ISO_URL: http://releases.ubuntu.com/22.04/ubuntu-22.04.5-live-server-amd64.iso
+      UBUNTU_ISO_FILENAME: ubuntu-22.04.5-live-server-amd64.iso
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up cache for Ubuntu ISO
+        id: cache-ubuntu-iso
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.UBUNTU_ISO_FILENAME }}
+          key: ubuntu-iso-${{ runner.os }}-${{ hashFiles(env.UBUNTU_ISO_FILENAME) }}
+          restore-keys: |
+            ubuntu-iso-${{ runner.os }}-
+
+      - name: Download Ubuntu ISO if not cached
+        if: steps.cache-ubuntu-iso.outputs.cache-hit != 'true'
+        run: |
+          wget -O ${{ env.UBUNTU_ISO_FILENAME }} ${{ env.UBUNTU_ISO_URL }}
+
+      - name: Determine ISO filename
+        id: get-filename
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "FILENAME=borgerpc-kiosk-amd64-${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          else
+            echo "FILENAME=borgerpc-kiosk-amd64-dev" >> $GITHUB_ENV
+          fi
+
+      - name: Build OS2borgerpc image
+        run: |
+          cd image && ./build_os2borgerpc_kiosk_image.sh ../${{ env.UBUNTU_ISO_FILENAME }} $FILENAME
+
+      - name: Upload ISO as an artifact (for non-release events)
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.FILENAME }}.iso
+          path: ./image/${{ env.FILENAME }}.iso
+
+      - name: Release ISO for public access (only for release events)
+        if: github.event_name == 'release' # TODO change to only run on release
+        run: |
+          aws s3 --endpoint-url https://fsn1.your-objectstorage.com cp ./image/${{ env.FILENAME }}.iso s3://os2borgerpc/borgerpc-os-images/${{ env.FILENAME }}.iso
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.HETZNER_OS2BORGERPC_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.HETZNER_OS2BORGERPC_SECRET_KEY }}
+
+      - name: Add download URL to release notes
+        if: github.event_name == 'release'
+        run: |
+          DOWNLOAD_URL="https://fsn1.your-objectstorage.com/os2borgerpc/borgerpc-os-images/${{ env.FILENAME }}.iso"
+          curl -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\": \"Download the ISO here: $DOWNLOAD_URL\"}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}
