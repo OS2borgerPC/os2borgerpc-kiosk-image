@@ -40,6 +40,7 @@ sudo apt download $(tr '\n' ' ' < deps.txt)
 popd
 
 sudo cp ../VERSION iso/scripts/
+sudo cp ../config.cfg iso/scripts/
 
 mbr="boot_hybrid.img"
 
