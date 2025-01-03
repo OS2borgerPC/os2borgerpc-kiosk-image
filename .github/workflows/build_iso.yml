@@ -56,7 +56,7 @@ jobs:
           path: ./image/${{ env.FILENAME }}.iso
 
       - name: Release ISO for public access (only for release events)
-        if: github.event_name == 'release' # TODO change to only run on release
+        if: github.event_name == 'release'
         run: |
           aws s3 --endpoint-url https://fsn1.your-objectstorage.com cp ./image/${{ env.FILENAME }}.iso s3://os2borgerpc/borgerpc-os-images/${{ env.FILENAME }}.iso
         env:
