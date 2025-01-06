@@ -6,3 +6,4 @@ python3-yaml
 curl
 pwgen
 ntpdate
+jq

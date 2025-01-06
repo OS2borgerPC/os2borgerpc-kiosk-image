@@ -7,7 +7,7 @@ printf "%s\n" "Installs build dependencies on the HOST machine"
 # Find current directory
 
 export DEBIAN_FRONTEND=noninteractive
-DEPENDENCIES=( p7zip-full rsync xorriso isolinux figlet )
+DEPENDENCIES=( p7zip-full rsync xorriso isolinux figlet fdisk)
 
 PKGS_TO_INSTALL=""
 
