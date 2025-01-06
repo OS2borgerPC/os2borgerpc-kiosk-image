@@ -106,4 +106,4 @@ Dpkg::Lock {Timeout "300";};
 EOF
 
 #  Connect to the admin system
-update_client_and_register.sh
+install_client_and_register.sh
