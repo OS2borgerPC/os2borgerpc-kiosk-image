@@ -6,7 +6,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # Update os2borgerpc-client
-update_client.sh
+install_client.sh
 
 # Register 
 register_new_os2borgerpc_client.sh
