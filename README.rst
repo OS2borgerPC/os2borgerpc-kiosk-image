@@ -29,3 +29,6 @@ and the offical Github project:
 The OS2borgerPC Kiosk/Server Image is free software, and you are welcome to
 use, study, modify and distribute it under the terms of version 3 of the
 GNU General Public License.
+
+--
+ny tekst
