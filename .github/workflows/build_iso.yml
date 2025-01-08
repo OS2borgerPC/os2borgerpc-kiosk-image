@@ -63,12 +63,22 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.HETZNER_OS2BORGERPC_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.HETZNER_OS2BORGERPC_SECRET_KEY }}
 
-      - name: Add download URL to release notes
+      - name: Append download URL to release notes
         if: github.event_name == 'release'
         run: |
+          # Fetch the current release notes
+          CURRENT_BODY=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }} \
+            | jq -r .body)
+
+          # Update the release notes with new content appended, jq used to escape the JSON properly.
           DOWNLOAD_URL="https://fsn1.your-objectstorage.com/os2borgerpc/borgerpc-os-images/${{ env.FILENAME }}.iso"
+          UPDATED_BODY=$(printf "%s\r\n## Download the ISO\r\n%s" "$CURRENT_BODY" "$DOWNLOAD_URL" | jq -Rs .)
+
+          # Patch the release notes
           curl -X PATCH \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d "{\"body\": \"Download the ISO here: $DOWNLOAD_URL\"}" \
+            -d "{\"body\": $UPDATED_BODY}" \
             https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}
