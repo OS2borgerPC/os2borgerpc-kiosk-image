@@ -44,7 +44,7 @@ jobs:
             echo "FILENAME=borgerpc-kiosk-amd64-dev" >> $GITHUB_ENV
           fi
 
-      - name: Build OS2borgerpc image
+      - name: Build OS2borgerpc Kiosk image
         run: |
           cd image && ./build_os2borgerpc_kiosk_image.sh ../${{ env.UBUNTU_ISO_FILENAME }} $FILENAME
 
