@@ -76,14 +76,6 @@ jobs:
           echo "RELEASE_ID=$REL_ID" >> $GITHUB_ENV
           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
 
-      - name: Write VERSION file from tag
-        run: |
-          if [[ "${{ env.IS_RELEASE }}" == "true" ]]; then
-            echo "${{ env.TAG_NAME }}" | sed 's/^v//' > VERSION
-          else
-            echo "dev" > VERSION
-          fi
-
       - name: Build OS2borgerpc Kiosk image
         run: |
           cd image && ./build_os2borgerpc_kiosk_image.sh ../${{ env.UBUNTU_ISO_FILENAME }} $FILENAME
