@@ -15,6 +15,9 @@ if ! command -v pipx > /dev/null 2>&1; then
   apt-get install -y pipx
 fi
 
+# Make pipx applications available system-wide
+export PIPX_BIN_DIR=/usr/local/bin
+
 # Install the configured os2borgerpc-client if it's not already installed
 if ! pipx list | grep -q "os2borgerpc-client"; then
   echo "OS2BorgerPC-client is not installed. Installing now..."
@@ -46,9 +49,6 @@ if ! pipx list | grep -q "os2borgerpc-client"; then
           echo "Installing package from GitHub..."
 
           pipx install "git+$PACKAGE_NAME@$LATEST_TAG"
-          
-          # Make the installed commands available system-wide
-          pipx ensurepath
 
           # Set values in config file
           set_os2borgerpc_config os2borgerpc_client_package "$PACKAGE_NAME"
@@ -67,9 +67,6 @@ if ! pipx list | grep -q "os2borgerpc-client"; then
           echo "Installing package from PyPI..."
 
           pipx install "$PACKAGE_NAME==$LATEST_VERSION"
-
-          # Make the installed commands available system-wide
-          pipx ensurepath
 
           # Set values in config file
           set_os2borgerpc_config os2borgerpc_client_package "$PACKAGE_NAME"
