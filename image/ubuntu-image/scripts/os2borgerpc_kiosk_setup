@@ -28,7 +28,7 @@ mkdir -p /etc/os2borgerpc/security/
 
 # Set product in configuration
 PRODUCT="os2borgerpc kiosk"
-echo "os2_product: $PRODUCT" >> /etc/os2borgerpc/os2borgerpc.conf
+echo "os2_product: $PRODUCT" > /etc/os2borgerpc/os2borgerpc.conf
 
 # Set version in configuration
 VERSION=$(cat "$DIR"/VERSION)

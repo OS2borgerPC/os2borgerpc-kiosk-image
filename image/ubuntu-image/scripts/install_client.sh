@@ -8,9 +8,16 @@ fi
 # default fallback os2borgerpc-client if no value is configured.
 DEFAULT_OS2BORGERPC_CLIENT=https://github.com/OS2borgerPC/os2borgerpc-client.git
 
+# Install pipx if it is not already installed
+if ! command -v pipx > /dev/null 2>&1; then
+  echo "pipx is not installed. Installing now..."
+  apt-get update
+  apt-get install -y pipx
+fi
+
 # Install the configured os2borgerpc-client if it's not already installed
-if ! pip show os2borgerpc-client > /dev/null 2>&1; then
-  echo "OS2borgerPC-client is not installed. Installing now..."
+if ! pipx list | grep -q "os2borgerpc-client"; then
+  echo "OS2BorgerPC-client is not installed. Installing now..."
 
   # Load values from the config file
   CONFIG_FILE="/etc/os2borgerpc/os2borgerpc.conf"
@@ -37,7 +44,11 @@ if ! pip show os2borgerpc-client > /dev/null 2>&1; then
       else
           echo "Latest GitHub tag for $REPO_NAME: $LATEST_TAG"
           echo "Installing package from GitHub..."
-          pip install "git+$PACKAGE_NAME@$LATEST_TAG" > /dev/null
+
+          pipx install "git+$PACKAGE_NAME@$LATEST_TAG"
+          
+          # Make the installed commands available system-wide
+          pipx ensurepath
 
           # Set values in config file
           set_os2borgerpc_config os2borgerpc_client_package "$PACKAGE_NAME"
@@ -54,7 +65,11 @@ if ! pip show os2borgerpc-client > /dev/null 2>&1; then
       else
           echo "Latest PyPI version for $PACKAGE_NAME: $LATEST_VERSION"
           echo "Installing package from PyPI..."
-          pip install "$PACKAGE_NAME==$LATEST_VERSION" > /dev/null
+
+          pipx install "$PACKAGE_NAME==$LATEST_VERSION"
+
+          # Make the installed commands available system-wide
+          pipx ensurepath
 
           # Set values in config file
           set_os2borgerpc_config os2borgerpc_client_package "$PACKAGE_NAME"
